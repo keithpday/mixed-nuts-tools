@@ -1,0 +1,20 @@
+
+1. Clone the GoogleDriveTools github repository  
+2. Install Python 3.7 (or higher)
+3. Put Python IDLE icon shortcut on desktop
+4. Install PyPDF2
+	a. In a CMD terminal prompt: pip install PyPDF2
+5. Install reportlab
+	a. In a CMD terminal prompt: pip install reportlab
+6. Instal send2trash
+	a. In a CMD terminal prompt: pip install Send2Trash
+7. Install colorama
+	a. In a CMD terminal prompt: pip install colorama
+8. Install termcolor
+	a. In a CMD terminal prompt: pip install termcolor
+9. Install Google API Client Libraies
+	a. In a CMD terminal prompt: pip install --upgrade google-api-python-client
+10. Install OAuth 2.0 client library
+	a. a. In a CMD terminal prompt: pip install oauth2client
+11. I need a way to designate the path to MixedNutsLib that is independent of which PC I am using.
+	a. Python environment variables  ??

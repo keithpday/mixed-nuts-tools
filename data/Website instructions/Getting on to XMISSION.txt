@@ -1,0 +1,11 @@
+https://wiki.xmission.com/About_FTP_and_Shared_Hosting
+
+in filezilla (this does not work)
+Host: sftp://ftp.xmission.com
+Username: mixednuts
+Password: 3030RNohavec
+Port 22
+
+Use Plesk to create the re-direct
+
+

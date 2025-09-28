@@ -1,0 +1,113 @@
+Traceback (most recent call last):
+  File "/home/keith/PythonProjects/projects/Mixed_Nuts/weekly_gig_mailer_drafts.py", line 325, in <module>
+    main()
+  File "/home/keith/PythonProjects/projects/Mixed_Nuts/weekly_gig_mailer_drafts.py", line 280, in main
+    ws_s=open_ws(creds,SHEET_ID,SCHEDULE_TAB); values=ws_s.get_all_values()
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/keith/PythonProjects/projects/Mixed_Nuts/weekly_gig_mailer_drafts.py", line 42, in open_ws
+    sh = gc.open_by_key(sheet_key)
+         ^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/keith/.local/lib/python3.12/site-packages/gspread/client.py", line 168, in open_by_key
+    spreadsheet = Spreadsheet(self.http_client, {"id": key})
+                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/keith/.local/lib/python3.12/site-packages/gspread/spreadsheet.py", line 29, in __init__
+    metadata = self.fetch_sheet_metadata()
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/keith/.local/lib/python3.12/site-packages/gspread/spreadsheet.py", line 230, in fetch_sheet_metadata
+    return self.client.fetch_sheet_metadata(self.id, params=params)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/keith/.local/lib/python3.12/site-packages/gspread/http_client.py", line 305, in fetch_sheet_metadata
+    r = self.request("get", url, params=params)
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/keith/.local/lib/python3.12/site-packages/gspread/http_client.py", line 114, in request
+    response = self.session.request(
+               ^^^^^^^^^^^^^^^^^^^^^
+  File "/home/keith/.local/lib/python3.12/site-packages/google/auth/transport/requests.py", line 535, in request
+    self.credentials.before_request(auth_request, method, url, request_headers)
+  File "/home/keith/.local/lib/python3.12/site-packages/google/auth/credentials.py", line 239, in before_request
+    self._blocking_refresh(request)
+  File "/home/keith/.local/lib/python3.12/site-packages/google/auth/credentials.py", line 202, in _blocking_refresh
+    self.refresh(request)
+  File "/home/keith/.local/lib/python3.12/site-packages/google/oauth2/credentials.py", line 409, in refresh
+    ) = reauth.refresh_grant(
+        ^^^^^^^^^^^^^^^^^^^^^
+  File "/home/keith/.local/lib/python3.12/site-packages/google/oauth2/reauth.py", line 366, in refresh_grant
+    _client._handle_error_response(response_data, retryable_error)
+  File "/home/keith/.local/lib/python3.12/site-packages/google/oauth2/_client.py", line 69, in _handle_error_response
+    raise exceptions.RefreshError(
+google.auth.exceptions.RefreshError: ('invalid_scope: Bad Request', {'error': 'invalid_scope', 'error_description': 'Bad Request'})
+Traceback (most recent call last):
+  File "/home/keith/PythonProjects/projects/Mixed_Nuts/weekly_gig_mailer_drafts.py", line 534, in <module>
+    main()
+  File "/home/keith/PythonProjects/projects/Mixed_Nuts/weekly_gig_mailer_drafts.py", line 524, in main
+    creds = get_credentials()
+            ^^^^^^^^^^^^^^^^^
+  File "/home/keith/PythonProjects/projects/Mixed_Nuts/weekly_gig_mailer_drafts.py", line 328, in get_credentials
+    creds = flow.run_local_server(port=0)
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/keith/.local/lib/python3.12/site-packages/google_auth_oauthlib/flow.py", line 447, in run_local_server
+    webbrowser.get(browser).open(auth_url, new=1, autoraise=True)
+    ^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.12/webbrowser.py", line 66, in get
+    raise Error("could not locate runnable browser")
+webbrowser.Error: could not locate runnable browser
+Traceback (most recent call last):
+  File "/home/keith/PythonProjects/projects/Mixed_Nuts/weekly_gig_mailer_drafts.py", line 534, in <module>
+    main()
+  File "/home/keith/PythonProjects/projects/Mixed_Nuts/weekly_gig_mailer_drafts.py", line 524, in main
+    creds = get_credentials()
+            ^^^^^^^^^^^^^^^^^
+  File "/home/keith/PythonProjects/projects/Mixed_Nuts/weekly_gig_mailer_drafts.py", line 328, in get_credentials
+    creds = flow.run_local_server(port=0)
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/keith/.local/lib/python3.12/site-packages/google_auth_oauthlib/flow.py", line 447, in run_local_server
+    webbrowser.get(browser).open(auth_url, new=1, autoraise=True)
+    ^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.12/webbrowser.py", line 66, in get
+    raise Error("could not locate runnable browser")
+webbrowser.Error: could not locate runnable browser
+Traceback (most recent call last):
+  File "/home/keith/PythonProjects/projects/Mixed_Nuts/weekly_gig_mailer_drafts.py", line 534, in <module>
+    main()
+  File "/home/keith/PythonProjects/projects/Mixed_Nuts/weekly_gig_mailer_drafts.py", line 524, in main
+    creds = get_credentials()
+            ^^^^^^^^^^^^^^^^^
+  File "/home/keith/PythonProjects/projects/Mixed_Nuts/weekly_gig_mailer_drafts.py", line 328, in get_credentials
+    creds = flow.run_local_server(port=0)
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/keith/.local/lib/python3.12/site-packages/google_auth_oauthlib/flow.py", line 447, in run_local_server
+    webbrowser.get(browser).open(auth_url, new=1, autoraise=True)
+    ^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.12/webbrowser.py", line 66, in get
+    raise Error("could not locate runnable browser")
+webbrowser.Error: could not locate runnable browser
+Traceback (most recent call last):
+  File "/home/keith/PythonProjects/projects/Mixed_Nuts/weekly_gig_mailer_drafts.py", line 686, in <module>
+    main()
+  File "/home/keith/PythonProjects/projects/Mixed_Nuts/weekly_gig_mailer_drafts.py", line 665, in main
+    creds = get_credentials()
+            ^^^^^^^^^^^^^^^^^
+  File "/home/keith/PythonProjects/projects/Mixed_Nuts/weekly_gig_mailer_drafts.py", line 378, in get_credentials
+    creds = flow.run_local_server(port=0)
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/keith/.local/lib/python3.12/site-packages/google_auth_oauthlib/flow.py", line 447, in run_local_server
+    webbrowser.get(browser).open(auth_url, new=1, autoraise=True)
+    ^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.12/webbrowser.py", line 66, in get
+    raise Error("could not locate runnable browser")
+webbrowser.Error: could not locate runnable browser
+Traceback (most recent call last):
+  File "/home/keith/PythonProjects/projects/Mixed_Nuts/weekly_gig_mailer_drafts.py", line 686, in <module>
+    main()
+  File "/home/keith/PythonProjects/projects/Mixed_Nuts/weekly_gig_mailer_drafts.py", line 665, in main
+    creds = get_credentials()
+            ^^^^^^^^^^^^^^^^^
+  File "/home/keith/PythonProjects/projects/Mixed_Nuts/weekly_gig_mailer_drafts.py", line 378, in get_credentials
+    creds = flow.run_local_server(port=0)
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/keith/.local/lib/python3.12/site-packages/google_auth_oauthlib/flow.py", line 447, in run_local_server
+    webbrowser.get(browser).open(auth_url, new=1, autoraise=True)
+    ^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.12/webbrowser.py", line 66, in get
+    raise Error("could not locate runnable browser")
+webbrowser.Error: could not locate runnable browser

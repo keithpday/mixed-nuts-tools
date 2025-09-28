@@ -1,0 +1,26 @@
+2025-09-22 17:47:40  Editor closed; last item on screen was option 99 - Edit Menu Items
+2025-09-22 17:48:09  Editor closed; last item on screen was option 97 - Edit Menu Items
+2025-09-22 17:49:14  Editor closed; last item on screen was option 96 - Edit Menu Items
+2025-09-22 17:52:15  Editor closed; last item on screen was option 99 - Edit Menu Items
+2025-09-22 19:15:08  Editor closed; last item on screen was option 40 - Email Late Payment Notice Test
+2025-09-22 19:38:42  Editor closed; last item on screen was option 2 - Convert Narration Docs To PDFs and Optionally Copy To Set
+2025-09-22 19:39:17  Editor closed; last item on screen was option 2 - Convert Narration Docs To PDFs and Optionally Copy To Set
+2025-09-22 19:41:57  Editor closed; last item on screen was option 3 - Upload Set Publish Stage Files
+2025-09-22 19:42:44  Editor closed; last item on screen was option 3 - Upload Set Publish Stage Files
+2025-09-22 19:43:02  Editor closed; last item on screen was option 40 - Email Late Payment Notice Test
+2025-09-22 19:45:01  Editor closed.
+2025-09-22 21:14:39  Editor closed; last item on screen was option 3 - Upload Set Publish Stage Files
+2025-09-22 21:36:52  Editor closed.
+2025-09-22 22:56:38  Editor closed; last item on screen was option 10 - Job Scheduler Console
+2025-09-23 09:44:07  Editor closed; last item on screen was option 40 - Email Late Payment Notice Test
+2025-09-23 09:44:14  Editor closed; last item on screen was option 41 - Email Late Payment Notice Final
+2025-09-24 10:29:14  Editor closed; last item on screen was option 80 - Report On Texts Via Twilio
+2025-09-24 10:29:16  Editor closed; last item on screen was option 41 - Email Late Payment Notice Final
+2025-09-27 13:18:22  Editor closed; last item on screen was option 4 - Make and Upload a New Book
+2025-09-27 13:24:47  Editor closed; last item on screen was option 3 - Upload Set Publish Stage Files
+2025-09-27 13:31:11  Editor closed; last item on screen was option 3 - Upload Set Publish Stage Files
+2025-09-27 22:44:35  Editor closed; last item on screen was option 1001 - git_status.sh
+2025-09-27 22:48:12  Editor closed; last item on screen was option 1001 - git_status.sh
+2025-09-27 22:52:47  Editor closed; last item on screen was option 1005 - git_open_repo.sh
+2025-09-27 22:52:49  Editor closed; last item on screen was option 1001 - git_status.sh
+2025-09-27 22:54:35  Editor closed; last item on screen was option 1005 - git_open_repo.sh

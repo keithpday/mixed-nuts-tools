@@ -1,0 +1,34 @@
+Traceback (most recent call last):
+  File "/home/keith/PythonProjects/projects/Mixed_Nuts/weekly_gig_mailer_drafts.py", line 534, in <module>
+    main()
+  File "/home/keith/PythonProjects/projects/Mixed_Nuts/weekly_gig_mailer_drafts.py", line 524, in main
+    creds = get_credentials()
+            ^^^^^^^^^^^^^^^^^
+  File "/home/keith/PythonProjects/projects/Mixed_Nuts/weekly_gig_mailer_drafts.py", line 328, in get_credentials
+    creds = flow.run_local_server(port=0)
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/keith/.local/lib/python3.12/site-packages/google_auth_oauthlib/flow.py", line 447, in run_local_server
+    webbrowser.get(browser).open(auth_url, new=1, autoraise=True)
+    ^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.12/webbrowser.py", line 66, in get
+    raise Error("could not locate runnable browser")
+webbrowser.Error: could not locate runnable browser
+Traceback (most recent call last):
+  File "/home/keith/PythonProjects/projects/Mixed_Nuts/weekly_gig_mailer_drafts.py", line 534, in <module>
+    main()
+  File "/home/keith/PythonProjects/projects/Mixed_Nuts/weekly_gig_mailer_drafts.py", line 524, in main
+    creds = get_credentials()
+            ^^^^^^^^^^^^^^^^^
+  File "/home/keith/PythonProjects/projects/Mixed_Nuts/weekly_gig_mailer_drafts.py", line 328, in get_credentials
+    creds = flow.run_local_server(port=0)
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/keith/.local/lib/python3.12/site-packages/google_auth_oauthlib/flow.py", line 447, in run_local_server
+    webbrowser.get(browser).open(auth_url, new=1, autoraise=True)
+    ^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.12/webbrowser.py", line 66, in get
+    raise Error("could not locate runnable browser")
+webbrowser.Error: could not locate runnable browser
+  File "/home/keith/PythonProjects/projects/Mixed_Nuts/weekly_gig_mailer_drafts.py", line 574
+    parser = argparse.ArgumentParser()
+    ^
+IndentationError: expected an indented block after function definition on line 573

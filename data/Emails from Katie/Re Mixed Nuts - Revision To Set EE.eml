@@ -1,0 +1,292 @@
+Delivered-To: keith.day@appsoni.com
+Received: by 2002:a17:90a:3b0b:0:0:0:0 with SMTP id d11-v6csp1470105pjc;
+        Thu, 12 Jul 2018 06:59:06 -0700 (PDT)
+X-Received: by 2002:a63:d401:: with SMTP id a1-v6mr2225887pgh.414.1531403946322;
+        Thu, 12 Jul 2018 06:59:06 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1531403946; cv=none;
+        d=google.com; s=arc-20160816;
+        b=rVl52C0QJ1M7qi5wE4mZpSGbN/rS6/Uf0amwXc5d3UJV3Bdf3Sss9+ZnwG/bdp2Vao
+         nv+ykIxX6/z1had0n2eQ5uCbIFffZXt78gM7R96TrKMUNww76c0eDYvj89zCafugTORM
+         LlXGcpRoi+w6MUq+5Hz5l48Qdc0uDAawWNVoyP0QxUElC80kKUpCkTGtz9nyOXfAyaML
+         s78/20ukp+Kd7XYBhfNaUtOcRjUuQZXRe1azZN1ZouE+MSXIcKdP2rDvLJ0x42ifjSXL
+         zviIIf9OCaz6UKakHFFW5W0TKpLT739MK53HLKZkNpu8qOuQtptVlW3VGk9c1Lp0ejC6
+         ZFqg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20160816;
+        h=references:to:cc:in-reply-to:date:subject:mime-version:message-id
+         :from:dkim-signature:arc-authentication-results;
+        bh=12o9Ci+XvwvQSLX6l92D49PDE+VnblpfKEoxKY/87UM=;
+        b=BPx8vN0FebGuDAaqSjxhlDa/bRDnLtsO2Z8k0mdAKGKsXcYP6DMI0aAKejuBCuUNEm
+         1jqohA+bRnt4vNygfUE0SsSAzCvjAVVNGhu6trPrtVQleigGW5OazHwgyOAgucTiAylG
+         HwLm9XT8EALLCWwYZc2PHakRygvqY/Z/uD3rl4oEqDNoNowKAJH4x9SnMN1N0GhSm6Kw
+         OLn6mq8MgHUvaDtEu6rCDawb2V7jH+9fV+IBBT1c6z6+ZCUWiAGQXyWlFPiEmmD6dGSw
+         t1OMFfZ/iU5XQ6ew2qcg1eD1eP82AYhGbxOOOV2CcL5U/7N9AXt8hNEC2uNllyLalWvZ
+         6mjA==
+ARC-Authentication-Results: i=1; mx.google.com;
+       dkim=pass header.i=@gmail.com header.s=20161025 header.b=BN3sl9ZH;
+       spf=pass (google.com: domain of sassmasterkmb@gmail.com designates 209.85.220.41 as permitted sender) smtp.mailfrom=sassmasterkmb@gmail.com;
+       dmarc=pass (p=NONE sp=QUARANTINE dis=NONE) header.from=gmail.com
+Return-Path: <sassmasterkmb@gmail.com>
+Received: from mail-sor-f41.google.com (mail-sor-f41.google.com. [209.85.220.41])
+        by mx.google.com with SMTPS id m18-v6sor5685553pge.67.2018.07.12.06.59.05
+        for <keith.day@appsoni.com>
+        (Google Transport Security);
+        Thu, 12 Jul 2018 06:59:06 -0700 (PDT)
+Received-SPF: pass (google.com: domain of sassmasterkmb@gmail.com designates 209.85.220.41 as permitted sender) client-ip=209.85.220.41;
+Authentication-Results: mx.google.com;
+       dkim=pass header.i=@gmail.com header.s=20161025 header.b=BN3sl9ZH;
+       spf=pass (google.com: domain of sassmasterkmb@gmail.com designates 209.85.220.41 as permitted sender) smtp.mailfrom=sassmasterkmb@gmail.com;
+       dmarc=pass (p=NONE sp=QUARANTINE dis=NONE) header.from=gmail.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=from:message-id:mime-version:subject:date:in-reply-to:cc:to
+         :references;
+        bh=12o9Ci+XvwvQSLX6l92D49PDE+VnblpfKEoxKY/87UM=;
+        b=BN3sl9ZHO1o0/zMIkBkj0XnGHgEsyPeCL2kEt4lKahChnEl9pXYz9g0Z9AFKgHFxh0
+         SeLjXMJmgqLlIvF0Td+9BWJj6A2kBDNVaBAHax/ZI2II4ivuoz1pNyN83+87GTNHv7iN
+         fx6McRoUHTjIUNIKN0PyKBwcRzcbNZ6WgpL1OgfCSThOylsy/FXQIsWB7pJGH/dIzNGT
+         dCQzdKb5itTIEKgKpPDuYqTnagakDbViNUu5bk0dU87zZuGTum/vPsdZlSLrNFCKwerM
+         v51Ursyam4IhaQVLH/cWVnTE/+XF8lJKO0YC15B2A5LKgHY8S+cD1Djx9u/JrMt2Pdua
+         pfBA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:message-id:mime-version:subject:date
+         :in-reply-to:cc:to:references;
+        bh=12o9Ci+XvwvQSLX6l92D49PDE+VnblpfKEoxKY/87UM=;
+        b=lUxtNymSCw1QvXaQk31Rj0kI/Go+wt1IFnLji8Mx8zcn+BQJhjYO3hdQ6FuZblZPrg
+         wy46+agcLdJoofR4QYJjbFs5O3vEw9BFFrsqkAajH2mey1Mty4fOBL2x6G6UpDyI7mIQ
+         U0pVIrAKtROui/VR2euraqrBF1vk/asSTBjh5fBw3yOez8S/MvHl+lDnXBw55vcnnnZK
+         fHpFG2HVQfXxokIfmlWWSxXTUMufYeCuzA/B4gS7u+zwg/r0SvfrBDaxcnmlbbOfp/l8
+         LKi3+1XpOSdMJVqRJp2PCPR2IhjkXU/7mwfAjcHGfAs5nRS/UiMMAWKlV6KrX7MJjNR2
+         yBfw==
+X-Gm-Message-State: AOUpUlFFB2IvFNrTgojO+keQky5uRxzw2yItBfzt71EMrSg5FnMiAHAW
+	gHoj4oJm0KBXGbUFE0Yq0Ag=
+X-Google-Smtp-Source: AAOMgpdS+Ub3T+Jw+EEJX0bHA9qyH2OdZ7USrGBM8xXrqEq6sbc6deZCiI57OpMq+alJrd5tygcUaw==
+X-Received: by 2002:a63:fc0a:: with SMTP id j10-v6mr2221772pgi.1.1531403945762;
+        Thu, 12 Jul 2018 06:59:05 -0700 (PDT)
+Return-Path: <sassmasterkmb@gmail.com>
+Received: from [10.20.2.32] ([163.248.33.20])
+        by smtp.gmail.com with ESMTPSA id a20-v6sm35004412pfi.124.2018.07.12.06.59.04
+        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
+        Thu, 12 Jul 2018 06:59:05 -0700 (PDT)
+From: Kathryn Blunt <sassmasterkmb@gmail.com>
+Message-Id: <63F43EB6-6125-415C-9A31-FE8591721F65@gmail.com>
+Content-Type: multipart/alternative;
+	boundary="Apple-Mail=_8011C242-0343-4EB1-AB22-7A09A06A2C68"
+Mime-Version: 1.0 (Mac OS X Mail 11.4 \(3445.8.2\))
+Subject: Re: Mixed Nuts - Revision To Set EE
+Date: Thu, 12 Jul 2018 07:59:03 -0600
+In-Reply-To: <d86eddbb-8130-3b83-4fb0-be1849a358d1@xmission.com>
+Cc: "Aguirre, Jenny" <jennyjaguirre@gmail.com>,
+ "Arnold, Kristie" <kristie@kristiearnold.com>,
+ "Bennett, John" <jbennettsmail@gmail.com>,
+ "Christensen, Jay" <jchristensen@bountifulutah.gov>,
+ "Cope, Laurisa" <wmrkel@gmail.com>,
+ "Cottam, Mike" <jmikecottam@gmail.com>,
+ "Cummings, Catherine" <bubstac8@yahoo.com>,
+ "Day, Keith" <keith.day@appsoni.com>,
+ "Day, Keith" <keith.day@coxautoinc.com>,
+ "Eastman, Alan" <aeastmanslc@gmail.com>,
+ "Geist, Bill" <williamgeistii@gmail.com>,
+ "Godinet, Omer" <omergodinet@hotmail.com>,
+ "Gomez, Robyn" <robynjoy.gomez@yahoo.com>,
+ "Malmrose, Taylor" <tkmalmrose@gmail.com>,
+ "Marsh, Bill" <wamarsh@earthlink.net>,
+ "Meier, Cindi" <cindi.meier@gmail.com>,
+ "Nelson, Katrina" <katfish82@hotmail.com>,
+ "Peterson, Neil" <neilpeterson22@gmail.com>,
+ "Smith, Merrill" <jazzpianomanslc@gmail.com>,
+ "Stone, Jeff" <drumtutor@infowest.com>,
+ "Stout, Kevin" <jazzboneplayer@mac.com>,
+ "Stout, Steve" <sstout67@centurylink.net>,
+ "Thorpe, Don" <donothorpe@gmail.com>,
+ "Wadsworth, Larry" <wadsy@q.com>,
+ "White, Wendy" <wendy1958@comcast.net>
+To: "Robert G. Nohavec" <nohavec@xmission.com>
+References: <d86eddbb-8130-3b83-4fb0-be1849a358d1@xmission.com>
+X-Mailer: Apple Mail (2.3445.8.2)
+
+
+--Apple-Mail=_8011C242-0343-4EB1-AB22-7A09A06A2C68
+Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain;
+	charset=us-ascii
+
+This revision has been uploaded to Google Drive.
+
+~ Katie Blunt
+sassmasterkmb@gmail.com
+
+
+
+
+> On Jun 27, 2018, at 7:03 PM, Robert Nohavec <nohavec@xmission.com> =
+wrote:
+>=20
+> Hi all,
+>=20
+> Attached is a revision to "Try A Little Tenderness" in Set EE.  The =
+revision is a change of chord in measures 18, 26, 42, and 45.  Please =
+make the appropriate changes in your music.
+>=20
+> Katie - Please upload this revision to Google.
+>=20
+> Thanks.
+>=20
+> Bob
+> --=20
+> Bob Nohavec, Leader
+> Mixed Nuts
+> (435) 649-6075
+> nohavec@xmission.com <mailto:nohavec@xmission.com>
+> www.mixednutsmusic.org <http://www.mixednutsmusic.org/><Try A Little =
+Tenderness(KV).pdf>
+
+
+--Apple-Mail=_8011C242-0343-4EB1-AB22-7A09A06A2C68
+Content-Transfer-Encoding: quoted-printable
+Content-Type: text/html;
+	charset=us-ascii
+
+<html><head><meta http-equiv=3D"Content-Type" content=3D"text/html; =
+charset=3Dus-ascii"></head><body style=3D"word-wrap: break-word; =
+-webkit-nbsp-mode: space; line-break: after-white-space;" class=3D"">This =
+revision has been uploaded to Google Drive.<div class=3D""><br =
+class=3D""><div class=3D"">
+<div style=3D"color: rgb(0, 0, 0); font-family: Helvetica; font-style: =
+normal; font-variant-ligatures: normal; font-variant-position: normal; =
+font-variant-caps: normal; font-variant-numeric: normal; =
+font-variant-alternates: normal; font-variant-east-asian: normal; =
+font-weight: normal; letter-spacing: normal; line-height: normal; =
+orphans: 2; text-align: -webkit-auto; text-indent: 0px; text-transform: =
+none; white-space: normal; widows: 2; word-spacing: 0px; =
+-webkit-text-stroke-width: 0px; word-wrap: break-word; =
+-webkit-nbsp-mode: space; -webkit-line-break: after-white-space;" =
+class=3D""><div class=3D"">~ Katie Blunt</div><div class=3D""><a =
+href=3D"mailto:sassmasterkmb@gmail.com" =
+class=3D"">sassmasterkmb@gmail.com</a></div><div class=3D""><br =
+class=3D""></div></div><br class=3D"Apple-interchange-newline"><br =
+class=3D"Apple-interchange-newline">
+</div>
+<div><br class=3D""><blockquote type=3D"cite" class=3D""><div =
+class=3D"">On Jun 27, 2018, at 7:03 PM, Robert Nohavec &lt;<a =
+href=3D"mailto:nohavec@xmission.com" =
+class=3D"">nohavec@xmission.com</a>&gt; wrote:</div><br =
+class=3D"Apple-interchange-newline"><div class=3D""><span =
+style=3D"caret-color: rgb(0, 0, 0); font-family: Helvetica; font-size: =
+12px; font-style: normal; font-variant-caps: normal; font-weight: =
+normal; letter-spacing: normal; text-align: start; text-indent: 0px; =
+text-transform: none; white-space: normal; word-spacing: 0px; =
+-webkit-text-stroke-width: 0px; background-color: rgb(255, 255, 255); =
+text-decoration: none; float: none; display: inline !important;" =
+class=3D"">Hi all,</span><br style=3D"caret-color: rgb(0, 0, 0); =
+font-family: Helvetica; font-size: 12px; font-style: normal; =
+font-variant-caps: normal; font-weight: normal; letter-spacing: normal; =
+text-align: start; text-indent: 0px; text-transform: none; white-space: =
+normal; word-spacing: 0px; -webkit-text-stroke-width: 0px; =
+background-color: rgb(255, 255, 255); text-decoration: none;" =
+class=3D""><br style=3D"caret-color: rgb(0, 0, 0); font-family: =
+Helvetica; font-size: 12px; font-style: normal; font-variant-caps: =
+normal; font-weight: normal; letter-spacing: normal; text-align: start; =
+text-indent: 0px; text-transform: none; white-space: normal; =
+word-spacing: 0px; -webkit-text-stroke-width: 0px; background-color: =
+rgb(255, 255, 255); text-decoration: none;" class=3D""><span =
+style=3D"caret-color: rgb(0, 0, 0); font-family: Helvetica; font-size: =
+12px; font-style: normal; font-variant-caps: normal; font-weight: =
+normal; letter-spacing: normal; text-align: start; text-indent: 0px; =
+text-transform: none; white-space: normal; word-spacing: 0px; =
+-webkit-text-stroke-width: 0px; background-color: rgb(255, 255, 255); =
+text-decoration: none; float: none; display: inline !important;" =
+class=3D"">Attached is a revision to "Try A Little Tenderness" in Set =
+EE.&nbsp; The revision is a change of chord in measures 18, 26, 42, and =
+45.&nbsp; Please make the appropriate changes in your music.</span><br =
+style=3D"caret-color: rgb(0, 0, 0); font-family: Helvetica; font-size: =
+12px; font-style: normal; font-variant-caps: normal; font-weight: =
+normal; letter-spacing: normal; text-align: start; text-indent: 0px; =
+text-transform: none; white-space: normal; word-spacing: 0px; =
+-webkit-text-stroke-width: 0px; background-color: rgb(255, 255, 255); =
+text-decoration: none;" class=3D""><br style=3D"caret-color: rgb(0, 0, =
+0); font-family: Helvetica; font-size: 12px; font-style: normal; =
+font-variant-caps: normal; font-weight: normal; letter-spacing: normal; =
+text-align: start; text-indent: 0px; text-transform: none; white-space: =
+normal; word-spacing: 0px; -webkit-text-stroke-width: 0px; =
+background-color: rgb(255, 255, 255); text-decoration: none;" =
+class=3D""><span style=3D"caret-color: rgb(0, 0, 0); font-family: =
+Helvetica; font-size: 12px; font-style: normal; font-variant-caps: =
+normal; font-weight: normal; letter-spacing: normal; text-align: start; =
+text-indent: 0px; text-transform: none; white-space: normal; =
+word-spacing: 0px; -webkit-text-stroke-width: 0px; background-color: =
+rgb(255, 255, 255); text-decoration: none; float: none; display: inline =
+!important;" class=3D"">Katie - Please upload this revision to =
+Google.</span><br style=3D"caret-color: rgb(0, 0, 0); font-family: =
+Helvetica; font-size: 12px; font-style: normal; font-variant-caps: =
+normal; font-weight: normal; letter-spacing: normal; text-align: start; =
+text-indent: 0px; text-transform: none; white-space: normal; =
+word-spacing: 0px; -webkit-text-stroke-width: 0px; background-color: =
+rgb(255, 255, 255); text-decoration: none;" class=3D""><br =
+style=3D"caret-color: rgb(0, 0, 0); font-family: Helvetica; font-size: =
+12px; font-style: normal; font-variant-caps: normal; font-weight: =
+normal; letter-spacing: normal; text-align: start; text-indent: 0px; =
+text-transform: none; white-space: normal; word-spacing: 0px; =
+-webkit-text-stroke-width: 0px; background-color: rgb(255, 255, 255); =
+text-decoration: none;" class=3D""><span style=3D"caret-color: rgb(0, 0, =
+0); font-family: Helvetica; font-size: 12px; font-style: normal; =
+font-variant-caps: normal; font-weight: normal; letter-spacing: normal; =
+text-align: start; text-indent: 0px; text-transform: none; white-space: =
+normal; word-spacing: 0px; -webkit-text-stroke-width: 0px; =
+background-color: rgb(255, 255, 255); text-decoration: none; float: =
+none; display: inline !important;" class=3D"">Thanks.</span><br =
+style=3D"caret-color: rgb(0, 0, 0); font-family: Helvetica; font-size: =
+12px; font-style: normal; font-variant-caps: normal; font-weight: =
+normal; letter-spacing: normal; text-align: start; text-indent: 0px; =
+text-transform: none; white-space: normal; word-spacing: 0px; =
+-webkit-text-stroke-width: 0px; background-color: rgb(255, 255, 255); =
+text-decoration: none;" class=3D""><br style=3D"caret-color: rgb(0, 0, =
+0); font-family: Helvetica; font-size: 12px; font-style: normal; =
+font-variant-caps: normal; font-weight: normal; letter-spacing: normal; =
+text-align: start; text-indent: 0px; text-transform: none; white-space: =
+normal; word-spacing: 0px; -webkit-text-stroke-width: 0px; =
+background-color: rgb(255, 255, 255); text-decoration: none;" =
+class=3D""><span style=3D"caret-color: rgb(0, 0, 0); font-family: =
+Helvetica; font-size: 12px; font-style: normal; font-variant-caps: =
+normal; font-weight: normal; letter-spacing: normal; text-align: start; =
+text-indent: 0px; text-transform: none; white-space: normal; =
+word-spacing: 0px; -webkit-text-stroke-width: 0px; background-color: =
+rgb(255, 255, 255); text-decoration: none; float: none; display: inline =
+!important;" class=3D"">Bob</span><br style=3D"caret-color: rgb(0, 0, =
+0); font-family: Helvetica; font-size: 12px; font-style: normal; =
+font-variant-caps: normal; font-weight: normal; letter-spacing: normal; =
+text-align: start; text-indent: 0px; text-transform: none; white-space: =
+normal; word-spacing: 0px; -webkit-text-stroke-width: 0px; =
+background-color: rgb(255, 255, 255); text-decoration: none;" =
+class=3D""><div class=3D"moz-signature" style=3D"caret-color: rgb(0, 0, =
+0); font-family: Helvetica; font-size: 12px; font-style: normal; =
+font-variant-caps: normal; font-weight: normal; letter-spacing: normal; =
+text-align: start; text-indent: 0px; text-transform: none; white-space: =
+normal; word-spacing: 0px; -webkit-text-stroke-width: 0px; =
+background-color: rgb(255, 255, 255); text-decoration: none;">--<span =
+class=3D"Apple-converted-space">&nbsp;</span><br class=3D""><div =
+style=3D"margin: 0px; font-style: normal; font-variant-caps: normal; =
+font-weight: normal; font-stretch: normal; font-size: 16px; line-height: =
+normal; font-family: Helvetica;" class=3D"">Bob Nohavec, =
+Leader</div><div style=3D"margin: 0px; font-style: normal; =
+font-variant-caps: normal; font-weight: normal; font-stretch: normal; =
+font-size: 16px; line-height: normal; font-family: Helvetica;" =
+class=3D"">Mixed Nuts</div><div style=3D"margin: 0px; font-style: =
+normal; font-variant-caps: normal; font-weight: normal; font-stretch: =
+normal; font-size: 16px; line-height: normal; font-family: Helvetica;" =
+class=3D"">(435) 649-6075</div><div style=3D"margin: 0px; font-style: =
+normal; font-variant-caps: normal; font-weight: normal; font-stretch: =
+normal; font-size: 16px; line-height: normal; font-family: Helvetica;" =
+class=3D""><a class=3D"moz-txt-link-abbreviated" =
+href=3D"mailto:nohavec@xmission.com">nohavec@xmission.com</a></div><div =
+style=3D"margin: 0px; font-style: normal; font-variant-caps: normal; =
+font-weight: normal; font-stretch: normal; font-size: 16px; line-height: =
+normal; font-family: Helvetica;" class=3D""><a =
+class=3D"moz-txt-link-abbreviated" =
+href=3D"http://www.mixednutsmusic.org/">www.mixednutsmusic.org</a></div></=
+div><span =
+id=3D"cid:BBB680FB-4611-493D-8E99-E11FEE7EC7B8@canyonsdistrict.pvt">&lt;Tr=
+y A Little Tenderness(KV).pdf&gt;</span></div></blockquote></div><br =
+class=3D""></div></body></html>=
+
+--Apple-Mail=_8011C242-0343-4EB1-AB22-7A09A06A2C68--
