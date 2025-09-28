@@ -1,0 +1,25 @@
+# Python cache
+__pycache__/
+*.pyc
+
+# Virtual environments
+venv/
+.venv/
+
+# Credentials
+.env
+config/*.json
+
+# Databases
+*.db
+*.sqlite
+
+# Large/binary data
+Data/
+*.pdf
+*.xlsx
+*.ods
+*.mp3
+*.wav
+
+
