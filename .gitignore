@@ -7,8 +7,12 @@ venv/
 .venv/
 
 # Credentials
+*.json
+*.pickle
 .env
 config/*.json
+config/*.pickle
+
 
 # Databases
 *.db
