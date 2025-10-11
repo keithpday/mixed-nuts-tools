@@ -24,3 +24,29 @@
 2025-09-27 22:52:47  Editor closed; last item on screen was option 1005 - git_open_repo.sh
 2025-09-27 22:52:49  Editor closed; last item on screen was option 1001 - git_status.sh
 2025-09-27 22:54:35  Editor closed; last item on screen was option 1005 - git_open_repo.sh
+2025-10-03 21:08:05  Editor closed; last item on screen was option 31 - Email Invoice and Logistics Final
+2025-10-04 10:28:17  Editor closed; last item on screen was option 32 - DUO Email Invoice and Logistics Test
+2025-10-04 10:28:35  Editor closed; last item on screen was option 30 - Email Invoice and Logistics Test
+2025-10-04 10:30:41  Editor closed; last item on screen was option 33 - DUO Email Invoice and Logistics Final
+2025-10-04 10:30:44  Editor closed; last item on screen was option 31 - Email Invoice and Logistics Final
+2025-10-10 06:38:49  Editor closed; last item on screen was option 30 - Email Invoice and Logistics Test
+2025-10-10 06:42:06  Editor closed; last item on screen was option 30 - Email Invoice and Logistics Test
+2025-10-10 06:42:48  Editor closed; last item on screen was option 31 - Email Invoice and Logistics Final
+2025-10-10 06:45:24  Editor closed; last item on screen was option 32 - DUO Email Invoice and Logistics Test
+2025-10-10 06:45:47  Editor closed; last item on screen was option 33 - DUO Email Invoice and Logistics Final
+2025-10-10 06:47:06  Editor closed; last item on screen was option 41 - Email Late Payment Notice Final
+2025-10-10 06:47:39  Editor closed; last item on screen was option 90 - Email Merge Test
+2025-10-10 06:48:20  Editor closed; last item on screen was option 20 - List Band Availability Time Slots
+2025-10-10 07:12:53  Editor closed; last item on screen was option 50 - Collections Email/Report Renerator Test
+2025-10-10 07:12:56  Editor closed; last item on screen was option 30 - Email Invoice and Logistics Test
+2025-10-10 07:13:54  Editor closed; last item on screen was option 50 - Collections Email/Report Renerator Test
+2025-10-10 10:30:45  Editor closed; last item on screen was option 50 - Collections Email/Report Renerator Test
+2025-10-10 11:41:30  Editor closed; last item on screen was option 50 - Collections Email/Report Renerator Test
+2025-10-10 21:49:58  Editor closed; last item on screen was option 50 - Collections Email/Report Renerator Test
+2025-10-11 10:12:40  Editor closed; last item on screen was option 50 - Collections Email/Report Renerator Test
+2025-10-11 10:14:21  Editor closed; last item on screen was option 90 - Email Merge Test
+2025-10-11 10:18:15  Editor closed; last item on screen was option 30 - Email Invoice and Logistics Test
+2025-10-11 10:19:20  Editor closed; last item on screen was option 31 - Email Invoice and Logistics Final
+2025-10-11 10:19:36  Editor closed; last item on screen was option 32 - DUO Email Invoice and Logistics Test
+2025-10-11 10:22:07  Editor closed; last item on screen was option 2 - Convert Narration Docs To PDFs and Optionally Copy To Set
+2025-10-11 16:12:56  Editor closed; last item on screen was option 1001 - git_status_option_add.sh (after coding, step #1 to check changes with option to add)

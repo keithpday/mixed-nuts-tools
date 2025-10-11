@@ -1,4 +1,0 @@
-Traceback (most recent call last):
-  File "/home/keith/PythonProjects/projects/Mixed_Nuts/daily_gig_reminderV3.py", line 9, in <module>
-    from dotenv import load_dotenv
-ModuleNotFoundError: No module named 'dotenv'
