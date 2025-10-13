@@ -690,28 +690,59 @@ def main():
     parser.add_argument("--send-test", action="store_true",
                         help="Send a preview of the draft to Keith only (subject prefixed [TEST]).")
     parser.add_argument("--week-of", type=str, default=None,
-                        help="YYYY-MM-DD (any date in the target week). Default: next week.")
+                        help="YYYY-MM-DD (any date in the target week). Default: prompt (defaults to next Sunday).")
     args = parser.parse_args()
 
     creds = get_credentials()
     today = datetime.now(gettz(TIMEZONE)).date()
 
-    week_start = None
+    # Determine default next Sunday
+    next_sunday, _ = next_week_range(today)
+
+    # Always prompt unless --week-of is explicitly provided
     if args.week_of:
         base = pd.to_datetime(args.week_of).date()
         week_start, _ = week_range(base)
+    else:
+        print()
+        print("Mixed Nuts Weekly Gig Mailer")
+        print("-----------------------------")
+        print(f"Default week begins on Sunday: {next_sunday.strftime('%Y-%m-%d')}")
+        user_input = input("Enter week beginning date (YYYY-MM-DD) or press Enter for default: ").strip()
+        if user_input:
+            try:
+                base = pd.to_datetime(user_input).date()
+                week_start, _ = week_range(base)
+            except Exception:
+                print("Invalid date format. Using default next Sunday.")
+                week_start = next_sunday
+        else:
+            week_start = next_sunday
 
+    # Show chosen week
+    print(f"\nSelected week beginning: {week_start.strftime('%Y-%m-%d')}\n")
+
+    # Branch to the requested action
     if args.send_test:
-        send_test(creds, week_start)
+        confirm = input("Send TEST email to Keith only? (y/n): ").strip().lower()
+        if confirm == "y":
+            send_test(creds, week_start)
+        else:
+            print("Cancelled.")
         return
 
     if args.send_approved:
-        send_approved(creds)
+        confirm = input("Send FINAL approved weekly email to all recipients? (y/n): ").strip().lower()
+        if confirm == "y":
+            send_approved(creds)
+        else:
+            print("Cancelled.")
         return
 
-    # Default: create/update draft for next week
-    start, end = next_week_range(today)
+    # Default action: create/update draft for selected week
+    start, end = week_range(week_start)
     draft_email(creds, start, end)
 
 if __name__ == "__main__":
     main()
+
