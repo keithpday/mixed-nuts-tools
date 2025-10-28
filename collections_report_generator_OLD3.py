@@ -90,6 +90,7 @@ def normalize_venue_from_account(account: str) -> str:
 # ------------------ EMAIL BUILD/SEND ------------------
 def make_html_email(intro_lines, table_rows, summary_line):
     """Build an HTML email body with styled table; return (plain_text, html_text)."""
+    # Plain text (fallback / saved as .txt)
     plain = []
     plain.extend(intro_lines)
     plain.append("")
@@ -106,6 +107,7 @@ def make_html_email(intro_lines, table_rows, summary_line):
     plain.append("📞 385-377-0451 (call or text anytime)")
     plain_text = "\n".join(plain)
 
+    # HTML version
     html_intro = "".join(f"<p style='margin:0 0 10px 0'>{line}</p>" for line in intro_lines)
     html_table_rows = "".join(
         "<tr>" +
@@ -142,6 +144,7 @@ def make_html_email(intro_lines, table_rows, summary_line):
     return plain_text, html
 
 def build_multipart_email(subject, plain_text, html_text, recipient):
+    """Create MIME multipart/alternative message for Gmail API."""
     msg = MIMEMultipart("alternative")
     msg["to"] = recipient
     msg["subject"] = subject
@@ -151,6 +154,7 @@ def build_multipart_email(subject, plain_text, html_text, recipient):
     return {"raw": raw}
 
 def send_gmail(gmail_service, subject, plain_text, html_text, recipient):
+    """Send email via Gmail API."""
     body = build_multipart_email(subject, plain_text, html_text, recipient)
     gmail_service.users().messages().send(userId="me", body=body).execute()
 
@@ -161,19 +165,22 @@ def build_and_send(spreadsheet_id, journal_tab, rcvbles_tab, creds_path, mode):
     sheets_service = get_service(creds_path, "sheets", "v4")
     gmail_service = get_service(creds_path, "gmail", "v1")
 
+    # Load data
     gl = read_sheet_values(sheets_service, spreadsheet_id, journal_tab)
     rc = read_sheet_values(sheets_service, spreadsheet_id, rcvbles_tab)
     if gl.empty or rc.empty:
         print("Error: Could not read data from sheets.")
         sys.exit(1)
 
+    # Ensure expected columns exist
     for col in ["Seq","Date","Description","Account","Debit","Credit","DocType","DocNbr","ExtDoc"]:
         if col not in gl.columns:
             gl[col] = ""
-    for col in ["ARInvoice Number","ARVenue","ARContact","ARFirst Name","AREmail Address"]:
+    for col in ["ARVenue","ARContact","ARFirst Name","ARCellPhone","ARWorkPhone","AREmail Address"]:
         if col not in rc.columns:
             rc[col] = ""
 
+    # Filter invoices & payments
     invs = gl[gl["DocType"] == "INV"].copy()
     pmts = gl[gl["DocType"].isin(["PMT", "ACH", "DEP", "ADJ", "CRN"])].copy()
 
@@ -190,26 +197,8 @@ def build_and_send(spreadsheet_id, journal_tab, rcvbles_tab, creds_path, mode):
         inv_rows = invs[invs["Venue"] == venue].copy()
         payments = pmts[pmts["Venue"] == venue].copy()
 
-        # ------------------------------
-        # Determine recipient by DocNbr ↔ ARInvoice Number
-        # ------------------------------
-        matched_rows = []
-        for _, inv in inv_rows.iterrows():
-            docnbr = str(inv.get("DocNbr", "")).strip()
-            if not docnbr:
-                continue
-            match = rc[rc["ARInvoice Number"].astype(str).str.strip() == docnbr]
-            if not match.empty:
-                matched_rows.append(match.iloc[0])
-
-        if matched_rows:
-            contact = pd.DataFrame(matched_rows).iloc[[0]]
-        else:
-            contact = pd.DataFrame()
-
-        # ------------------------------
-        # Extract contact info
-        # ------------------------------
+        # Contact info
+        contact = rc[rc["ARVenue"].astype(str).str.strip().str.lower() == venue.strip().lower()]
         first_name = ""
         if not contact.empty:
             first_name = str(contact.get("ARFirst Name", "").iloc[0]).strip().title()
@@ -222,19 +211,9 @@ def build_and_send(spreadsheet_id, journal_tab, rcvbles_tab, creds_path, mode):
             if not contact.empty and "AREmail Address" in contact
             else ""
         )
+        recipient = TEST_EMAIL if mode == "T" else (recipient_real or TEST_EMAIL)
 
-        if mode == "T":
-            recipient = TEST_EMAIL
-        else:
-            if recipient_real:
-                recipient = recipient_real
-            else:
-                print(f"⚠️  No email found for any invoice in venue '{venue}'. Defaulting to TEST email.")
-                recipient = TEST_EMAIL
-
-        # ------------------------------
         # Build invoice rows
-        # ------------------------------
         table_rows = []
         total_due = 0
         for _, inv in inv_rows.iterrows():
@@ -313,6 +292,7 @@ def build_and_send(spreadsheet_id, journal_tab, rcvbles_tab, creds_path, mode):
         plain_text = e["Body"]
         html_text = e["_html"]
 
+        # In FINAL mode — show oldest invoice and total, ask permission
         if mode == "F":
             rows = e.get("_rows", [])
             total_due = e.get("_total", 0)
@@ -350,12 +330,14 @@ def build_and_send(spreadsheet_id, journal_tab, rcvbles_tab, creds_path, mode):
             print(f"  ❌ FAILED: {ex}")
         sent_rows.append(e)
 
+    # Final summary
     if mode == "F":
         sent_final = sum(1 for e in sent_rows if e["Sent?"].startswith("Sent"))
         skipped_final = len(all_emails) - sent_final
         print(f"\nSummary: {sent_final} emails sent, {skipped_final} skipped.")
 
     print(f"All done in {'TEST' if mode == 'T' else 'FINAL'} mode!")
+
 
 # ------------------ ENTRY ------------------
 if __name__ == "__main__":

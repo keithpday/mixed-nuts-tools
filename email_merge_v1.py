@@ -401,6 +401,16 @@ def main():
     try:
         body_template = export_doc_as_html(drive_service, args.template_doc_id)
 
+
+        # DEBUG: After: body_template = export_doc_as_html(drive_service, args.template_doc_id)
+        with open("debug_template_raw.html", "w", encoding="utf-8") as f:
+            f.write(body_template)
+
+        # DEBUG" Also save the plain-text export you already did for subject extraction:
+        with open("debug_template_plain.txt", "w", encoding="utf-8") as f:
+            f.write(plain_text)
+
+
         # 1) Remove all <style> blocks (Google Doc page CSS)
         body_template = re.sub(
             r'<style.*?>.*?</style>',
@@ -409,22 +419,29 @@ def main():
             flags=re.DOTALL | re.IGNORECASE
         )
 
-        # 2) Remove the first Subject: line if it slipped into the HTML (regardless of wrapper)
-        #    a) wrapped in a tag like <p> / <div> / <span> ... </p>
+        # 2) Remove the first "Subject:" line if it slipped into the HTML export
+        #    Covers <p>, <div>, <span>, <h1>-<h6>, nested or with attributes.
         body_template = re.sub(
-            r'<(?:p|div|span)[^>]*>\s*Subject:\s.*?</(?:p|div|span)>',
+            r'(?is)<(p|div|span|h[1-6])[^>]*>\s*Subject:\s.*?</\1\s*>',
             '',
             body_template,
-            count=1,
-            flags=re.IGNORECASE | re.DOTALL
+            count=1
         )
-        #    b) plain text line at top (fallback)
+
+        # 2b) Also remove "Subject:" if wrapped in nested tags (e.g., <div><p>Subject:...</p></div>)
         body_template = re.sub(
-            r'^\s*Subject:\s.*?$',
+            r'(?is)<div[^>]*>[\s\n\r]*<p[^>]*>\s*Subject:\s.*?</p>[\s\n\r]*</div>',
             '',
             body_template,
-            count=1,
-            flags=re.IGNORECASE | re.MULTILINE
+            count=1
+        )
+
+        # 2c) Final fallback — plain text or stray Subject: anywhere near top of body
+        body_template = re.sub(
+            r'(?im)^\s*Subject:\s.*?(\r?\n|<br>|</p>|</div>|</h[1-6]>|$)',
+            '',
+            body_template,
+            count=1
         )
 
         # 3) Strip layout styles ONLY from the <body> tag (leave paragraph/list styles intact)

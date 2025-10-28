@@ -1,11 +1,11 @@
-Hi there,
+Hi Peggy,
 
 Thanks again for having The Mixed Nuts perform!
 According to our records, the following invoice(s) remain open. Could you please review and confirm payment status?
 
 Invoice # | Invoice Date | Amount | Payments | Balance | Age
 ---|---|---|---|---|---
-701LRROSJ | 2025-10-07 | $240 | — | $240 | 4 days
+701LRROSJ | 2025-10-07 | $240 | — | $240 | 6 days
 
 Total outstanding balance for Legacy Ret Res S.J. = $240.
 

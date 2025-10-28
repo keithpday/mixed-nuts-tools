@@ -1,0 +1,19 @@
+﻿Subject: Mixed Nuts invoice and performance logistics for {{Performance Day}}, {{Performance Date}}, {{Time}}
+Hi {{Contact First Name}}, 
+{{Intro Line}}
+I hope this message finds you well. We're looking forward to our upcoming performance at your facility. Here's a quick rundown of the logistics:  
+Date and Time: {{Performance Day}}, {{Performance Date}}, {{Time}}.
+Setup: We plan to arrive approximately 1 hour before the performance. 
+Takedown: Anticipating about 30 minutes after the show for packing up. 
+{{Set Description}}  
+If you're looking for a different musical vibe to complement your activity, let us know your preference, and we'll customize our performance accordingly.   
+If there are any changes or additional details we should be aware of, feel free to reach out. Thanks for having us, and we're excited to bring some great music to {{Venue}}.
+We have included the invoice for your records.  We pay our band members at the performance.  If you could have a check ready for us at the show we would appreciate it.  If you need more time to pay, no worries.
+
+
+Best,
+Keith Day
+📞 385-377-0451 (text or call)
+🎶 Mixed Nuts
+A Legacy Performers Production
+🌐 legacyperformers.org

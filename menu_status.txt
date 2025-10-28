@@ -51,3 +51,49 @@
 2025-10-11 10:22:07  Editor closed; last item on screen was option 2 - Convert Narration Docs To PDFs and Optionally Copy To Set
 2025-10-11 16:12:56  Editor closed; last item on screen was option 1001 - git_status_option_add.sh (after coding, step #1 to check changes with option to add)
 2025-10-12 21:33:16  Editor closed; last item on screen was option 5 - Weekly Gig Mailer Drafts
+2025-10-14 23:25:52  Editor closed; last item on screen was option 50 - Collections Email/Report Renerator Test
+2025-10-14 23:25:58  Editor closed.
+2025-10-15 11:32:06  Editor closed; last item on screen was option 30 - Email Invoice and Logistics Test
+2025-10-15 11:34:43  Editor closed; last item on screen was option 1 - Gig Reminder Test (to +13853770451)
+2025-10-15 11:34:58  Editor closed; last item on screen was option 7 - Weekly Gig Mailer Send Test
+2025-10-15 11:36:23  Editor closed; last item on screen was option 1 - Gig Reminder Test (to +13853770451)
+2025-10-15 11:39:00  Editor closed; last item on screen was option 30 - Email Invoice and Logistics Test
+2025-10-15 11:39:46  Editor closed; last item on screen was option 1 - Gig Reminder Test (to +13853770451)
+2025-10-15 12:01:11  Editor closed; last item on screen was option 1 - Gig Reminder Test (to +13853770451)
+2025-10-15 12:02:01  Editor closed; last item on screen was option 1 - Gig Reminder Test (to +13853770451)
+2025-10-16 08:06:58  Editor closed; last item on screen was option 8001 - Christmas Marketing Test (email_merge_v1.py)
+2025-10-16 08:07:03  Editor closed; last item on screen was option 30 - Email Invoice and Logistics Test
+2025-10-16 09:31:51  Editor closed; last item on screen was option 8001 - Christmas Marketing Test (email_merge_v2.py)
+2025-10-16 09:34:49  Editor closed; last item on screen was option 8001 - Christmas Marketing Test (email_merge_v2.py)
+2025-10-16 09:35:27  Editor closed; last item on screen was option 8001 - Christmas Marketing Test (email_merge_v2.py)
+2025-10-16 10:06:01  Editor closed; last item on screen was option 8001 - Marketing Email To Contacts Test (email_merge_v2.py)
+2025-10-16 10:06:36  Editor closed; last item on screen was option 8002 - Marketing Email To Contacts Final (email_merge_v2.py)
+2025-10-16 10:07:04  Editor closed; last item on screen was option 8001 - Marketing Email To Contacts Test (email_merge_v2.py)
+2025-10-16 10:16:27  Editor closed; last item on screen was option 8001 - Test: Bring live Christmas cheer to your residents 🎅🎶 -- Marketing Email To Contacts (email_merge_v2.py)
+2025-10-16 15:44:13  Editor closed; last item on screen was option 8002 - Final: Bring live Christmas cheer to your residents 🎅🎶 -- Marketing Email To Contacts (email_merge_v2.py)
+2025-10-20 10:42:40  Editor closed; last item on screen was option 1 - Gig Reminder Test (to +13853770451)
+2025-10-20 10:43:27  Editor closed; last item on screen was option 1 - Gig Reminder Test (to +13853770451)
+2025-10-20 10:43:51  Editor closed; last item on screen was option 1 - Gig Reminder Test (to +13853770451)
+2025-10-20 10:49:34  Editor closed; last item on screen was option 1 - Gig Reminder Test (to +13853770451)
+2025-10-20 10:52:11  Editor closed; last item on screen was option 1 - Gig Reminder Test (to +13853770451)
+2025-10-20 10:52:12  Editor closed; last item on screen was option 7 - Weekly Gig Mailer Send Test
+2025-10-20 10:52:54  Editor closed; last item on screen was option 80 - Report On Texts Via Twilio
+2025-10-20 10:53:14  Editor closed; last item on screen was option 1 - Gig Reminder Test (to +13853770451)
+2025-10-21 08:55:15  Editor closed; last item on screen was option 200 - Update Gmail filters from contacts (SafeInbox and NonSafeInbox)
+2025-10-21 08:55:19  Editor closed; last item on screen was option 40 - Email Late Payment Notice Test
+2025-10-21 22:40:23  Editor closed; last item on screen was option 8003 - Test:
+2025-10-21 22:40:24  Editor closed; last item on screen was option 8001 - Test: Bring live Christmas cheer to your residents 🎅🎶 -- Marketing Email To Contacts (email_merge_v2.py)
+2025-10-21 22:41:46  Editor closed; last item on screen was option 8003 - Test: Confirming our schedule for the Mixed Nuts for next year
+2025-10-21 22:41:48  Editor closed; last item on screen was option 8001 - Test: Bring live Christmas cheer to your residents 🎅🎶 -- Marketing Email To Contacts (email_merge_v2.py)
+2025-10-25 05:53:36  Editor closed; last item on screen was option 8 - Google Contacts Labeler
+2025-10-25 06:01:23  Editor closed; last item on screen was option 40 - Email Late Payment Notice Test
+2025-10-25 09:27:43  Editor closed; last item on screen was option 201 - Update Gmail filters from contacts (SafeInbox and NonSafeInbox)
+2025-10-25 09:28:53  Editor closed; last item on screen was option 200 - Google Contacts Labeler
+2025-10-25 09:28:55  Editor closed; last item on screen was option 8 - Google Contacts Labeler
+2025-10-25 09:29:13  Editor closed.
+2025-10-25 09:51:31  Editor closed; last item on screen was option 200 - Google Contacts Labeler
+2025-10-25 09:52:34  Editor closed; last item on screen was option 200 - Google Contacts Labeler
+2025-10-25 23:14:48  Editor closed; last item on screen was option 300 - Rename Files By Replacing Chars
+2025-10-25 23:14:49  Editor closed; last item on screen was option 200 - Google Contacts Labeler
+2025-10-27 14:55:18  Editor closed; last item on screen was option 3 - Upload Set Publish Stage Files
+2025-10-27 15:03:51  Editor closed.

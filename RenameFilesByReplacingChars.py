@@ -2,21 +2,17 @@ from googleapiclient.discovery import build
 from googleapiclient.errors import HttpError
 from google.oauth2 import service_account
 from oauth2client import file, client, tools
+from google_auth_oauthlib.flow import InstalledAppFlow
+from googleapiclient.discovery import build
 import sys
 import re
 
-def authenticate_drive():
-    """Authenticate and return a Google Drive service object."""
-    SERVICE_ACCOUNT_FILE = "my-service-account-key.json"
+def authenticate_drive_user():
     SCOPES = ["https://www.googleapis.com/auth/drive"]
-    
-    # Authenticate and build the Google Drive API service
-    store = file.Storage(SERVICE_ACCOUNT_FILE)
-    creds = store.get()
-    if not creds or creds.invalid:
-        flow = client.flow_from_clientsecrets('credentials.json', SCOPES)
-        creds = tools.run_flow(flow, store)
-    
+    flow = InstalledAppFlow.from_client_secrets_file(
+        "/home/keith/PythonProjects/projects/Mixed_Nuts/config/credentials.json", SCOPES
+    )
+    creds = flow.run_local_server(port=0)
     return build("drive", "v3", credentials=creds)
 
 def get_folder_id(service, folder_name):
@@ -80,7 +76,7 @@ def rename_files(service, files, search_str, replace_str):
                 print(f"Failed to rename {old_name}: {error}")
 
 def main():
-    service = authenticate_drive()
+    service = authenticate_drive_user()
     folder_name = input("Enter the folder name: ")
     search_str = input("Enter the search string: ")
     replace_str = input("Enter the replacement string: ")

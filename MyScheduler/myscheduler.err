@@ -1,0 +1,369 @@
+Traceback (most recent call last):
+  File "/home/keith/PythonProjects/projects/Mixed_Nuts/my_python_program_schedulerV2.py", line 4, in <module>
+    from dateutil import tz
+ModuleNotFoundError: No module named 'dateutil'
+Traceback (most recent call last):
+  File "/home/keith/PythonProjects/projects/Mixed_Nuts/my_python_program_schedulerV2.py", line 4, in <module>
+    from dateutil import tz
+ModuleNotFoundError: No module named 'dateutil'
+Traceback (most recent call last):
+  File "/home/keith/PythonProjects/projects/Mixed_Nuts/my_python_program_schedulerV2.py", line 4, in <module>
+    from dateutil import tz
+ModuleNotFoundError: No module named 'dateutil'
+Traceback (most recent call last):
+  File "/home/keith/PythonProjects/projects/Mixed_Nuts/my_python_program_schedulerV2.py", line 4, in <module>
+    from dateutil import tz
+ModuleNotFoundError: No module named 'dateutil'
+Traceback (most recent call last):
+  File "/home/keith/PythonProjects/projects/Mixed_Nuts/my_python_program_schedulerV2.py", line 4, in <module>
+    from dateutil import tz
+ModuleNotFoundError: No module named 'dateutil'
+Traceback (most recent call last):
+  File "/home/keith/PythonProjects/projects/Mixed_Nuts/my_python_program_schedulerV2.py", line 4, in <module>
+    from dateutil import tz
+ModuleNotFoundError: No module named 'dateutil'
+Traceback (most recent call last):
+  File "/home/keith/PythonProjects/projects/Mixed_Nuts/my_python_program_schedulerV2.py", line 4, in <module>
+    from dateutil import tz
+ModuleNotFoundError: No module named 'dateutil'
+Traceback (most recent call last):
+  File "/home/keith/PythonProjects/projects/Mixed_Nuts/my_python_program_schedulerV2.py", line 4, in <module>
+    from dateutil import tz
+ModuleNotFoundError: No module named 'dateutil'
+Traceback (most recent call last):
+  File "/home/keith/PythonProjects/projects/Mixed_Nuts/my_python_program_schedulerV2.py", line 4, in <module>
+    from dateutil import tz
+ModuleNotFoundError: No module named 'dateutil'
+Traceback (most recent call last):
+  File "/home/keith/PythonProjects/projects/Mixed_Nuts/my_python_program_schedulerV2.py", line 4, in <module>
+    from dateutil import tz
+ModuleNotFoundError: No module named 'dateutil'
+Traceback (most recent call last):
+  File "/home/keith/PythonProjects/projects/Mixed_Nuts/my_python_program_schedulerV2.py", line 4, in <module>
+    from dateutil import tz
+ModuleNotFoundError: No module named 'dateutil'
+Traceback (most recent call last):
+  File "/home/keith/PythonProjects/projects/Mixed_Nuts/my_python_program_schedulerV2.py", line 4, in <module>
+    from dateutil import tz
+ModuleNotFoundError: No module named 'dateutil'
+Traceback (most recent call last):
+  File "/home/keith/PythonProjects/projects/Mixed_Nuts/my_python_program_schedulerV2.py", line 4, in <module>
+    from dateutil import tz
+ModuleNotFoundError: No module named 'dateutil'
+Traceback (most recent call last):
+  File "/home/keith/PythonProjects/projects/Mixed_Nuts/my_python_program_schedulerV2.py", line 4, in <module>
+    from dateutil import tz
+ModuleNotFoundError: No module named 'dateutil'
+Traceback (most recent call last):
+  File "/home/keith/PythonProjects/projects/Mixed_Nuts/my_python_program_schedulerV2.py", line 4, in <module>
+    from dateutil import tz
+ModuleNotFoundError: No module named 'dateutil'
+Traceback (most recent call last):
+  File "/home/keith/PythonProjects/projects/Mixed_Nuts/my_python_program_schedulerV2.py", line 4, in <module>
+    from dateutil import tz
+ModuleNotFoundError: No module named 'dateutil'
+Traceback (most recent call last):
+  File "/home/keith/PythonProjects/projects/Mixed_Nuts/my_python_program_schedulerV2.py", line 4, in <module>
+    from dateutil import tz
+ModuleNotFoundError: No module named 'dateutil'
+Traceback (most recent call last):
+  File "/home/keith/PythonProjects/projects/Mixed_Nuts/my_python_program_schedulerV2.py", line 4, in <module>
+    from dateutil import tz
+ModuleNotFoundError: No module named 'dateutil'
+Traceback (most recent call last):
+  File "/home/keith/PythonProjects/projects/Mixed_Nuts/my_python_program_schedulerV2.py", line 4, in <module>
+    from dateutil import tz
+ModuleNotFoundError: No module named 'dateutil'
+Traceback (most recent call last):
+  File "/home/keith/PythonProjects/projects/Mixed_Nuts/my_python_program_schedulerV2.py", line 4, in <module>
+    from dateutil import tz
+ModuleNotFoundError: No module named 'dateutil'
+Traceback (most recent call last):
+  File "/home/keith/PythonProjects/projects/Mixed_Nuts/my_python_program_schedulerV2.py", line 4, in <module>
+    from dateutil import tz
+ModuleNotFoundError: No module named 'dateutil'
+Traceback (most recent call last):
+  File "/home/keith/PythonProjects/projects/Mixed_Nuts/my_python_program_schedulerV2.py", line 4, in <module>
+    from dateutil import tz
+ModuleNotFoundError: No module named 'dateutil'
+Traceback (most recent call last):
+  File "/home/keith/PythonProjects/projects/Mixed_Nuts/my_python_program_schedulerV2.py", line 5, in <module>
+    from croniter import croniter
+ModuleNotFoundError: No module named 'croniter'
+Traceback (most recent call last):
+  File "/home/keith/PythonProjects/projects/Mixed_Nuts/my_python_program_schedulerV2.py", line 5, in <module>
+    from croniter import croniter
+ModuleNotFoundError: No module named 'croniter'
+Traceback (most recent call last):
+  File "/home/keith/PythonProjects/projects/Mixed_Nuts/my_python_program_schedulerV2.py", line 5, in <module>
+    from croniter import croniter
+ModuleNotFoundError: No module named 'croniter'
+Traceback (most recent call last):
+  File "/home/keith/PythonProjects/projects/Mixed_Nuts/my_python_program_schedulerV2.py", line 5, in <module>
+    from croniter import croniter
+ModuleNotFoundError: No module named 'croniter'
+Traceback (most recent call last):
+  File "/home/keith/PythonProjects/projects/Mixed_Nuts/my_python_program_schedulerV2.py", line 5, in <module>
+    from croniter import croniter
+ModuleNotFoundError: No module named 'croniter'
+Traceback (most recent call last):
+  File "/home/keith/PythonProjects/projects/Mixed_Nuts/my_python_program_schedulerV2.py", line 5, in <module>
+    from croniter import croniter
+ModuleNotFoundError: No module named 'croniter'
+Traceback (most recent call last):
+  File "/home/keith/PythonProjects/projects/Mixed_Nuts/my_python_program_schedulerV2.py", line 5, in <module>
+    from croniter import croniter
+ModuleNotFoundError: No module named 'croniter'
+Traceback (most recent call last):
+  File "/home/keith/PythonProjects/projects/Mixed_Nuts/my_python_program_schedulerV2.py", line 5, in <module>
+    from croniter import croniter
+ModuleNotFoundError: No module named 'croniter'
+Traceback (most recent call last):
+  File "/home/keith/PythonProjects/projects/Mixed_Nuts/my_python_program_schedulerV2.py", line 5, in <module>
+    from croniter import croniter
+ModuleNotFoundError: No module named 'croniter'
+Traceback (most recent call last):
+  File "/home/keith/PythonProjects/projects/Mixed_Nuts/my_python_program_schedulerV2.py", line 5, in <module>
+    from croniter import croniter
+ModuleNotFoundError: No module named 'croniter'
+Traceback (most recent call last):
+  File "/home/keith/PythonProjects/projects/Mixed_Nuts/my_python_program_schedulerV2.py", line 5, in <module>
+    from croniter import croniter
+ModuleNotFoundError: No module named 'croniter'
+Traceback (most recent call last):
+  File "/home/keith/PythonProjects/projects/Mixed_Nuts/my_python_program_schedulerV2.py", line 5, in <module>
+    from croniter import croniter
+ModuleNotFoundError: No module named 'croniter'
+Traceback (most recent call last):
+  File "/home/keith/PythonProjects/projects/Mixed_Nuts/my_python_program_schedulerV2.py", line 5, in <module>
+    from croniter import croniter
+ModuleNotFoundError: No module named 'croniter'
+Traceback (most recent call last):
+  File "/home/keith/PythonProjects/projects/Mixed_Nuts/my_python_program_schedulerV2.py", line 5, in <module>
+    from croniter import croniter
+ModuleNotFoundError: No module named 'croniter'
+Traceback (most recent call last):
+  File "/home/keith/PythonProjects/projects/Mixed_Nuts/my_python_program_schedulerV2.py", line 5, in <module>
+    from croniter import croniter
+ModuleNotFoundError: No module named 'croniter'
+Traceback (most recent call last):
+  File "/home/keith/PythonProjects/projects/Mixed_Nuts/my_python_program_schedulerV2.py", line 5, in <module>
+    from croniter import croniter
+ModuleNotFoundError: No module named 'croniter'
+Traceback (most recent call last):
+  File "/home/keith/PythonProjects/projects/Mixed_Nuts/my_python_program_schedulerV2.py", line 5, in <module>
+    from croniter import croniter
+ModuleNotFoundError: No module named 'croniter'
+Traceback (most recent call last):
+  File "/home/keith/PythonProjects/projects/Mixed_Nuts/my_python_program_schedulerV2.py", line 5, in <module>
+    from croniter import croniter
+ModuleNotFoundError: No module named 'croniter'
+Traceback (most recent call last):
+  File "/home/keith/PythonProjects/projects/Mixed_Nuts/my_python_program_schedulerV2.py", line 5, in <module>
+    from croniter import croniter
+ModuleNotFoundError: No module named 'croniter'
+Traceback (most recent call last):
+  File "/home/keith/PythonProjects/projects/Mixed_Nuts/my_python_program_schedulerV2.py", line 5, in <module>
+    from croniter import croniter
+ModuleNotFoundError: No module named 'croniter'
+Traceback (most recent call last):
+  File "/home/keith/PythonProjects/projects/Mixed_Nuts/my_python_program_schedulerV2.py", line 5, in <module>
+    from croniter import croniter
+ModuleNotFoundError: No module named 'croniter'
+Traceback (most recent call last):
+  File "/home/keith/PythonProjects/projects/Mixed_Nuts/my_python_program_schedulerV2.py", line 5, in <module>
+    from croniter import croniter
+ModuleNotFoundError: No module named 'croniter'
+Traceback (most recent call last):
+  File "/home/keith/PythonProjects/projects/Mixed_Nuts/my_python_program_schedulerV2.py", line 5, in <module>
+    from croniter import croniter
+ModuleNotFoundError: No module named 'croniter'
+Traceback (most recent call last):
+  File "/home/keith/PythonProjects/projects/Mixed_Nuts/my_python_program_schedulerV2.py", line 5, in <module>
+    from croniter import croniter
+ModuleNotFoundError: No module named 'croniter'
+Traceback (most recent call last):
+  File "/home/keith/PythonProjects/projects/Mixed_Nuts/my_python_program_schedulerV2.py", line 5, in <module>
+    from croniter import croniter
+ModuleNotFoundError: No module named 'croniter'
+Traceback (most recent call last):
+  File "/usr/local/lib/python3.12/dist-packages/croniter/croniter.py", line 281, in _alphaconv
+    return cls.ALPHACONV[index][key]
+           ~~~~~~~~~~~~~~~~~~~~^^^^^
+KeyError: ''
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/keith/PythonProjects/projects/Mixed_Nuts/my_python_program_schedulerV2.py", line 192, in main
+    refresh_missing_next_runs(conn)
+  File "/home/keith/PythonProjects/projects/Mixed_Nuts/my_python_program_schedulerV2.py", line 99, in refresh_missing_next_runs
+    nxt = compute_next_run(job, now)
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/keith/PythonProjects/projects/Mixed_Nuts/my_python_program_schedulerV2.py", line 76, in compute_next_run
+    nxt_local = datetime.fromtimestamp(croniter(expr, base_local).get_next(float), tz=local_tz)
+                                       ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/dist-packages/croniter/croniter.py", line 268, in __init__
+    self.expanded, self.nth_weekday_of_month = self.expand(
+                                               ^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/dist-packages/croniter/croniter.py", line 1113, in expand
+    return cls._expand(
+           ^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/dist-packages/croniter/croniter.py", line 1017, in _expand
+    t = cls._alphaconv(field_index, t, expressions)
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/dist-packages/croniter/croniter.py", line 283, in _alphaconv
+    raise CroniterNotAlphaError("[{0}] is not acceptable".format(" ".join(expressions)))
+croniter.croniter.CroniterNotAlphaError: [0 11, 23 * * *] is not acceptable
+Traceback (most recent call last):
+  File "/usr/local/lib/python3.12/dist-packages/croniter/croniter.py", line 281, in _alphaconv
+    return cls.ALPHACONV[index][key]
+           ~~~~~~~~~~~~~~~~~~~~^^^^^
+KeyError: ''
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/keith/PythonProjects/projects/Mixed_Nuts/my_python_program_schedulerV2.py", line 192, in main
+    refresh_missing_next_runs(conn)
+  File "/home/keith/PythonProjects/projects/Mixed_Nuts/my_python_program_schedulerV2.py", line 99, in refresh_missing_next_runs
+    nxt = compute_next_run(job, now)
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/keith/PythonProjects/projects/Mixed_Nuts/my_python_program_schedulerV2.py", line 76, in compute_next_run
+    nxt_local = datetime.fromtimestamp(croniter(expr, base_local).get_next(float), tz=local_tz)
+                                       ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/dist-packages/croniter/croniter.py", line 268, in __init__
+    self.expanded, self.nth_weekday_of_month = self.expand(
+                                               ^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/dist-packages/croniter/croniter.py", line 1113, in expand
+    return cls._expand(
+           ^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/dist-packages/croniter/croniter.py", line 1017, in _expand
+    t = cls._alphaconv(field_index, t, expressions)
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/dist-packages/croniter/croniter.py", line 283, in _alphaconv
+    raise CroniterNotAlphaError("[{0}] is not acceptable".format(" ".join(expressions)))
+croniter.croniter.CroniterNotAlphaError: [0 11, 23 * * *] is not acceptable
+Traceback (most recent call last):
+  File "/usr/local/lib/python3.12/dist-packages/croniter/croniter.py", line 281, in _alphaconv
+    return cls.ALPHACONV[index][key]
+           ~~~~~~~~~~~~~~~~~~~~^^^^^
+KeyError: ''
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/keith/PythonProjects/projects/Mixed_Nuts/my_python_program_schedulerV2.py", line 192, in main
+    refresh_missing_next_runs(conn)
+  File "/home/keith/PythonProjects/projects/Mixed_Nuts/my_python_program_schedulerV2.py", line 99, in refresh_missing_next_runs
+    nxt = compute_next_run(job, now)
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/keith/PythonProjects/projects/Mixed_Nuts/my_python_program_schedulerV2.py", line 76, in compute_next_run
+    nxt_local = datetime.fromtimestamp(croniter(expr, base_local).get_next(float), tz=local_tz)
+                                       ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/dist-packages/croniter/croniter.py", line 268, in __init__
+    self.expanded, self.nth_weekday_of_month = self.expand(
+                                               ^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/dist-packages/croniter/croniter.py", line 1113, in expand
+    return cls._expand(
+           ^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/dist-packages/croniter/croniter.py", line 1017, in _expand
+    t = cls._alphaconv(field_index, t, expressions)
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/dist-packages/croniter/croniter.py", line 283, in _alphaconv
+    raise CroniterNotAlphaError("[{0}] is not acceptable".format(" ".join(expressions)))
+croniter.croniter.CroniterNotAlphaError: [0 11, 23 * * *] is not acceptable
+Traceback (most recent call last):
+  File "/usr/local/lib/python3.12/dist-packages/croniter/croniter.py", line 281, in _alphaconv
+    return cls.ALPHACONV[index][key]
+           ~~~~~~~~~~~~~~~~~~~~^^^^^
+KeyError: ''
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/keith/PythonProjects/projects/Mixed_Nuts/my_python_program_schedulerV2.py", line 192, in main
+    refresh_missing_next_runs(conn)
+  File "/home/keith/PythonProjects/projects/Mixed_Nuts/my_python_program_schedulerV2.py", line 99, in refresh_missing_next_runs
+    nxt = compute_next_run(job, now)
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/keith/PythonProjects/projects/Mixed_Nuts/my_python_program_schedulerV2.py", line 76, in compute_next_run
+    nxt_local = datetime.fromtimestamp(croniter(expr, base_local).get_next(float), tz=local_tz)
+                                       ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/dist-packages/croniter/croniter.py", line 268, in __init__
+    self.expanded, self.nth_weekday_of_month = self.expand(
+                                               ^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/dist-packages/croniter/croniter.py", line 1113, in expand
+    return cls._expand(
+           ^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/dist-packages/croniter/croniter.py", line 1017, in _expand
+    t = cls._alphaconv(field_index, t, expressions)
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/dist-packages/croniter/croniter.py", line 283, in _alphaconv
+    raise CroniterNotAlphaError("[{0}] is not acceptable".format(" ".join(expressions)))
+croniter.croniter.CroniterNotAlphaError: [0 11, 23 * * *] is not acceptable
+Traceback (most recent call last):
+  File "/usr/local/lib/python3.12/dist-packages/croniter/croniter.py", line 281, in _alphaconv
+    return cls.ALPHACONV[index][key]
+           ~~~~~~~~~~~~~~~~~~~~^^^^^
+KeyError: ''
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/keith/PythonProjects/projects/Mixed_Nuts/my_python_program_schedulerV2.py", line 192, in main
+    refresh_missing_next_runs(conn)
+  File "/home/keith/PythonProjects/projects/Mixed_Nuts/my_python_program_schedulerV2.py", line 99, in refresh_missing_next_runs
+    nxt = compute_next_run(job, now)
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/keith/PythonProjects/projects/Mixed_Nuts/my_python_program_schedulerV2.py", line 76, in compute_next_run
+    nxt_local = datetime.fromtimestamp(croniter(expr, base_local).get_next(float), tz=local_tz)
+                                       ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/dist-packages/croniter/croniter.py", line 268, in __init__
+    self.expanded, self.nth_weekday_of_month = self.expand(
+                                               ^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/dist-packages/croniter/croniter.py", line 1113, in expand
+    return cls._expand(
+           ^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/dist-packages/croniter/croniter.py", line 1017, in _expand
+    t = cls._alphaconv(field_index, t, expressions)
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/dist-packages/croniter/croniter.py", line 283, in _alphaconv
+    raise CroniterNotAlphaError("[{0}] is not acceptable".format(" ".join(expressions)))
+croniter.croniter.CroniterNotAlphaError: [0 11, 23 * * *] is not acceptable
+Traceback (most recent call last):
+  File "/home/keith/PythonProjects/projects/Mixed_Nuts/my_python_program_schedulerV2.py", line 192, in main
+    refresh_missing_next_runs(conn)
+  File "/home/keith/PythonProjects/projects/Mixed_Nuts/my_python_program_schedulerV2.py", line 99, in refresh_missing_next_runs
+    nxt = compute_next_run(job, now)
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/keith/PythonProjects/projects/Mixed_Nuts/my_python_program_schedulerV2.py", line 76, in compute_next_run
+    nxt_local = datetime.fromtimestamp(croniter(expr, base_local).get_next(float), tz=local_tz)
+                                       ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/dist-packages/croniter/croniter.py", line 268, in __init__
+    self.expanded, self.nth_weekday_of_month = self.expand(
+                                               ^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/dist-packages/croniter/croniter.py", line 1113, in expand
+    return cls._expand(
+           ^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/dist-packages/croniter/croniter.py", line 852, in _expand
+    raise CroniterBadCronError("Exactly 5, 6 or 7 columns has to be specified for iterator expression.")
+croniter.croniter.CroniterBadCronError: Exactly 5, 6 or 7 columns has to be specified for iterator expression.
+Traceback (most recent call last):
+  File "/home/keith/PythonProjects/projects/Mixed_Nuts/my_python_program_schedulerV2.py", line 192, in main
+    refresh_missing_next_runs(conn)
+  File "/home/keith/PythonProjects/projects/Mixed_Nuts/my_python_program_schedulerV2.py", line 99, in refresh_missing_next_runs
+    nxt = compute_next_run(job, now)
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/keith/PythonProjects/projects/Mixed_Nuts/my_python_program_schedulerV2.py", line 76, in compute_next_run
+    nxt_local = datetime.fromtimestamp(croniter(expr, base_local).get_next(float), tz=local_tz)
+                                       ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/dist-packages/croniter/croniter.py", line 268, in __init__
+    self.expanded, self.nth_weekday_of_month = self.expand(
+                                               ^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/dist-packages/croniter/croniter.py", line 1113, in expand
+    return cls._expand(
+           ^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/dist-packages/croniter/croniter.py", line 852, in _expand
+    raise CroniterBadCronError("Exactly 5, 6 or 7 columns has to be specified for iterator expression.")
+croniter.croniter.CroniterBadCronError: Exactly 5, 6 or 7 columns has to be specified for iterator expression.

@@ -3,20 +3,30 @@ import sys
 from PyPDF2 import PdfMerger
 from googleapiclient.discovery import build
 from googleapiclient.http import MediaIoBaseDownload, MediaFileUpload
-from oauth2client import file, client, tools
+from googleapiclient.discovery import build
+from google_auth_oauthlib.flow import InstalledAppFlow
+from google.auth.transport.requests import Request
+from google.oauth2.credentials import Credentials
 from io import BytesIO
 import time
 
 # === Google Drive Authentication ===
-SERVICE_ACCOUNT_FILE = os.path.expanduser("~/PythonProjects/projects/Mixed_Nuts/config/my-service-account-key.json")
+CREDENTIALS_FILE = os.path.expanduser("~/PythonProjects/projects/Mixed_Nuts/config/credentials.json")
+TOKEN_FILE = os.path.expanduser("~/PythonProjects/projects/Mixed_Nuts/config/token_drive.json")  # shared Drive token
 SCOPES = ["https://www.googleapis.com/auth/drive"]
 
-store = file.Storage(SERVICE_ACCOUNT_FILE)
-creds = store.get()
-if not creds or creds.invalid:
-    #flow = client.flow_from_clientsecrets("credentials.json", SCOPES)
-    flow = client.flow_from_clientsecrets(os.path.expanduser("~/PythonProjects/projects/Mixed_Nuts/config/credentials.json"), SCOPES)
-    creds = tools.run_flow(flow, store)
+creds = None
+if os.path.exists(TOKEN_FILE):
+    creds = Credentials.from_authorized_user_file(TOKEN_FILE, SCOPES)
+
+if not creds or not creds.valid:
+    if creds and creds.expired and creds.refresh_token:
+        creds.refresh(Request())
+    else:
+        flow = InstalledAppFlow.from_client_secrets_file(CREDENTIALS_FILE, SCOPES)
+        creds = flow.run_local_server(port=0)
+    with open(TOKEN_FILE, "w") as token:
+        token.write(creds.to_json())
 
 drive_service = build("drive", "v3", credentials=creds)
 
