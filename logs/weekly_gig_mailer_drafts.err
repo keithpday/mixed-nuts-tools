@@ -125,3 +125,10 @@ Traceback (most recent call last):
     raise ImportError(
 ImportError: Unable to import required dependencies:
 numpy: No module named 'numpy'
+Traceback (most recent call last):
+  File "/home/keith/PythonProjects/projects/Mixed_Nuts/weekly_gig_mailer_drafts.py", line 747, in <module>
+    main()
+  File "/home/keith/PythonProjects/projects/Mixed_Nuts/weekly_gig_mailer_drafts.py", line 711, in main
+    user_input = input("Enter week beginning date (YYYY-MM-DD) or press Enter for default: ").strip()
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+EOFError: EOF when reading a line

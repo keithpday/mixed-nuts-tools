@@ -5,7 +5,7 @@ According to our records, the following invoice(s) remain open. Could you please
 
 Invoice # | Invoice Date | Amount | Payments | Balance | Age
 ---|---|---|---|---|---
-667LVOS | 2025-09-03 | $200 | — | $200 | 40 days (30+ days)
+667LVOS | 2025-09-03 | $200 | — | $200 | 55 days (30+ days)
 
 Total outstanding balance for Legacy Village Of Sugarhouse = $200.
 

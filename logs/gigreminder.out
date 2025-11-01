@@ -133,3 +133,51 @@ DEBUG → Number of headers: 16 | Number of columns in first row: 14
 ⚠️  Header/data mismatch detected! (Column count mismatch)
 No gigs found for today.
 All schedule rows checked. Process completed
+🔐 Twilio auth OK — account: Legacy Performers (status: active)
+Checking date 2025-10-29
+⚠️  Warning: issue reading full sheet (the given 'expected_headers' contains unknown headers: {'Bring Key board', 'Vocal'}); retrying with limited range A1:P instead...
+DEBUG → Headers detected: ['Day', 'Date', 'Venue', 'Time', 'Location', 'Set', 'Pays', 'Vocal', 'Piano', 'Bring Key board', 'Bass', 'Drums', 'Guitar', 'Vibes', 'Revision Date', 'Notes']
+DEBUG → Number of headers: 16 | Number of columns in first row: 14
+⚠️  Header/data mismatch detected! (Column count mismatch)
+No gigs found for today.
+All schedule rows checked. Process completed
+🔐 Twilio auth OK — account: Legacy Performers (status: active)
+Checking date 2025-10-30
+⚠️  Warning: issue reading full sheet (the given 'expected_headers' contains unknown headers: {'Vocal', 'Bring Key board'}); retrying with limited range A1:P instead...
+DEBUG → Headers detected: ['Day', 'Date', 'Venue', 'Time', 'Location', 'Set', 'Pays', 'Vocal', 'Piano', 'Bring Key board', 'Bass', 'Drums', 'Guitar', 'Vibes', 'Revision Date', 'Notes']
+DEBUG → Number of headers: 16 | Number of columns in first row: 14
+⚠️  Header/data mismatch detected! (Column count mismatch)
+No gigs found for today.
+All schedule rows checked. Process completed
+🔐 Twilio auth OK — account: Legacy Performers (status: active)
+Checking date 2025-10-31
+⚠️  Warning: issue reading full sheet (the given 'expected_headers' contains unknown headers: {'Vocal', 'Bring Key board'}); retrying with limited range A1:P instead...
+DEBUG → Headers detected: ['Day', 'Date', 'Venue', 'Time', 'Location', 'Set', 'Pays', 'Vocal', 'Piano', 'Bring Key board', 'Bass', 'Drums', 'Guitar', 'Vibes', 'Revision Date', 'Notes']
+DEBUG → Number of headers: 16 | Number of columns in first row: 14
+⚠️  Header/data mismatch detected! (Column count mismatch)
+
+=== 🎵 Processing row 2 for Solista Orem (10/31/2025) ===
+DEBUG → Raw Vocal cell content: 'Katie'
+DEBUG → Extracted aliases: ['Katie', 'Neil', 'Keith', 'Bill', 'Jay', 'Lynn']
+✅ Sending to Katie (801-518-9717)
+✅ Sent to +18015189717: SMcbd37e2c4aa68d6364630f91927db421
+✅ Sending to Neil (801-404-7641)
+✅ Sent to +18014047641: SM8598bd749f7779fe9feefc0e5f4a9cf0
+✅ Sending to Keith (385-377-0451)
+✅ Sent to +13853770451: SM5a97efd58eb26b1193741bd52b7a8a0e
+✅ Sending to Bill (801-859-9624)
+✅ Sent to +18018599624: SM3fd4387e5e6292bcbd7110e656db9e71
+✅ Sending to Jay (801-510-5983)
+✅ Sent to +18015105983: SM02f2df5c675efaeb9551c9d33f2d2a14
+✅ Sending to Lynn (801-654-7445)
+✅ Sent to +18016547445: SMbceeba64e9fecb1cb04378591589e4ff
+✅ Row complete — notified: bill, jay, katie, keith, lynn, neil
+All schedule rows checked. Process completed
+🔐 Twilio auth OK — account: Legacy Performers (status: active)
+Checking date 2025-11-01
+⚠️  Warning: issue reading full sheet (the given 'expected_headers' contains unknown headers: {'Vocal', 'Bring Key board'}); retrying with limited range A1:P instead...
+DEBUG → Headers detected: ['Day', 'Date', 'Venue', 'Time', 'Location', 'Set', 'Pays', 'Vocal', 'Piano', 'Bring Key board', 'Bass', 'Drums', 'Guitar', 'Vibes', 'Revision Date', 'Notes']
+DEBUG → Number of headers: 16 | Number of columns in first row: 14
+⚠️  Header/data mismatch detected! (Column count mismatch)
+No gigs found for today.
+All schedule rows checked. Process completed

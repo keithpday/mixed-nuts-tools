@@ -33,13 +33,20 @@ from google_auth_oauthlib.flow import InstalledAppFlow
 from google.auth.transport.requests import Request
 
 # ---------------- CONFIG ----------------
-DEFAULT_CREDENTIALS_FILE = os.environ.get("GOOGLE_OAUTH_CLIENT", "credentials.json")
-TOKEN_FILE = "token.json"
+DEFAULT_CREDENTIALS_FILE = os.environ.get(
+    "GOOGLE_OAUTH_CLIENT",
+    "/home/keith/PythonProjects/projects/Mixed_Nuts/config/credentials.json"
+)
+
+# Use a dedicated token file for this version
+TOKEN_FILE = "/home/keith/PythonProjects/projects/Mixed_Nuts/config/token_email_merge_v2.json"
+
 SCOPES = [
     "https://www.googleapis.com/auth/spreadsheets",
     "https://www.googleapis.com/auth/drive.readonly",
     "https://www.googleapis.com/auth/gmail.send",
 ]
+
 
 # ---------------- UTILS ----------------
 def debug(msg: str): print(f"[DEBUG] {msg}")

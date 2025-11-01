@@ -1,28 +1,31 @@
 #!/usr/bin/env python3
 """
-List daily availability windows (true time ranges) from a Google Sheets schedule.
+List daily availability windows (true time ranges) from a Google Sheets schedule,
+grouped by ensemble ("Mixed Nuts", "Mixed Nuts Duo: Sweet and Salty",
+"Mixed Nuts: Trio Blend", "Mixed Nuts: Quad Blend").
 
 Rules:
 - Playable day window: 9:00 am → 9:00 pm (local).
-- Enforce 2-hour separation around *every* scheduled gig:
-  For each gig, block [ gig_start - 2h , gig_end + 2h ].
+- Enforce a separation buffer around *every* scheduled gig for the run:
+  - Inside Salt Lake County: 2 hours
+  - Outside Salt Lake County: 3 hours
 - The day's available windows are the complement of all blocked intervals within 9:00–21:00.
 - Exclude Sundays, New Year's Day (Jan 1), and Christmas (Dec 25).
 
 Sheet:
 - Tab: CurrentYrSched
-- Required columns: Date, Venue, Location, Time
+- Required columns: Date, Venue, Location, Time, Set
 - Time format: "hh:mm a/p(m optional) - hh:mm a/p(m optional)"
   e.g., "3:00 p - 4:30 p", "1:30 pm - 3:00 pm"
 
 Prompts:
 - Start date (default: today)
 - End date   (default: today + 60 days)
-- Optional CSV path
+- Inside Salt Lake County? [Y/n]  (default Yes)
 
 Output:
-- One line per eligible date: YYYY-MM-DD (Dow): <availability ranges or "No availability">
-- CSV (if chosen): Date, DayOfWeek, AvailableRanges
+- For each group present in the window, a header and one line per eligible date:
+  YYYY-MM-DD (Dow): <availability ranges or "No availability">
 """
 
 import re
@@ -42,6 +45,7 @@ COL_DATE     = "Date"
 COL_VENUE    = "Venue"
 COL_LOCATION = "Location"
 COL_TIME     = "Time"
+COL_SET      = "Set"   # <— newly required for grouping
 
 # Skip Sundays and these fixed-date holidays
 HOLIDAYS_MMDD = {(1, 1), (12, 25)}  # New Year's Day, Christmas
@@ -50,13 +54,17 @@ HOLIDAYS_MMDD = {(1, 1), (12, 25)}  # New Year's Day, Christmas
 DAY_START_MIN = 9 * 60      # 09:00
 DAY_END_MIN   = 21 * 60     # 21:00
 
-# Buffer before and after each gig (minutes)
-BUFFER_MIN = 120            # 2 hours
-
 # Strict time range parser: "hh:mm a/p(m?) - hh:mm a/p(m?)"
 _TIME_RANGE_RE = re.compile(
     r"^\s*(\d{1,2}):(\d{2})\s*([aApP][mM]?)\s*[-–—]\s*(\d{1,2}):(\d{2})\s*([aApP][mM]?)\s*$"
 )
+
+# Group full names
+GROUP_DEFAULT = "Mixed Nuts"
+GROUP_DUO     = "Mixed Nuts Duo: Sweet and Salty"
+GROUP_TRIO    = "Mixed Nuts: Trio Blend"
+GROUP_QUAD    = "Mixed Nuts: Quad Blend"
+
 
 # ---------------- Helpers ----------------
 def print_banner():
@@ -171,8 +179,19 @@ def complement_within_day(blocked_intervals: list[tuple[int, int]]) -> list[tupl
         avail = [(day_start, day_end)]
     return avail
 
-def prompt_user_options() -> tuple[date, date, str | None]:
-    """Prompt for start/end dates and an optional CSV path, with sensible defaults."""
+def determine_group(set_text: str) -> str:
+    """Map the 'Set' cell to a group name, case-insensitive substring match."""
+    s = (set_text or "").lower()
+    if "duo" in s:
+        return GROUP_DUO
+    if "trio" in s:
+        return GROUP_TRIO
+    if "quad" in s:
+        return GROUP_QUAD
+    return GROUP_DEFAULT
+
+def prompt_user_options() -> tuple[date, date, int]:
+    """Prompt for start/end dates and county selection; return (start_date, end_date, buffer_min)."""
     today = date.today()
     default_start = today
     default_end = today + timedelta(days=60)
@@ -194,22 +213,26 @@ def prompt_user_options() -> tuple[date, date, str | None]:
         print("  ⚠️ End date precedes start date — swapping them.")
         start_date, end_date = end_date, start_date
 
-    csv_path = None
-    choice = input("Write CSV output? [y/N]: ").strip().lower()
-    if choice == "y":
-        suggested = f"/home/keith/Desktop/availability_{start_date}_{end_date}.csv"
-        p = input(f"CSV path [default {suggested}]: ").strip()
-        csv_path = p or suggested
+    inside = input("Inside Salt Lake County? [Y/n]: ").strip().lower()
+    if inside == "n":
+        buffer_min = 180  # 3 hours
+    else:
+        buffer_min = 120  # 2 hours (default)
 
-    return start_date, end_date, csv_path
+    return start_date, end_date, buffer_min
+
 
 # ---------------- Core ----------------
-def collect_blocked_intervals_by_date(rows, start_date: date, end_date: date) -> dict[date, list[tuple[int, int]]]:
+def collect_blocked_by_group_and_date(rows,
+                                      start_date: date,
+                                      end_date: date,
+                                      buffer_min: int) -> dict[str, dict[date, list[tuple[int, int]]]]:
     """
-    Build {date: [(blocked_start, blocked_end), ...]} where each blocked interval is:
-        [ gig_start - BUFFER_MIN , gig_end + BUFFER_MIN ]
+    Build {group: {date: [(blocked_start, blocked_end), ...]}} where each blocked interval is:
+        [ gig_start - buffer_min , gig_end + buffer_min ]
+    Only rows within the date window and not excluded (Sunday/holiday) are considered.
     """
-    blocked = defaultdict(list)
+    blocked: dict[str, dict[date, list[tuple[int, int]]]] = defaultdict(lambda: defaultdict(list))
     for row in rows:
         d = parse_sheet_date(row.get(COL_DATE))
         if not d or d < start_date or d > end_date:
@@ -217,21 +240,26 @@ def collect_blocked_intervals_by_date(rows, start_date: date, end_date: date) ->
         if is_blocked_date(d):
             continue
 
+        set_cell = str(row.get(COL_SET, "") or "")
+        group = determine_group(set_cell)
+
         tcell = str(row.get(COL_TIME, "") or "").strip()
         start_min, end_min = parse_time_range_strict(tcell)
         if start_min is None or end_min is None:
             # Can't parse -> ignore this gig (change here if you want unknown to block).
             continue
 
-        start_with_buffer = start_min - BUFFER_MIN
-        end_with_buffer   = end_min + BUFFER_MIN
-        blocked[d].append((start_with_buffer, end_with_buffer))
+        start_with_buffer = start_min - buffer_min
+        end_with_buffer   = end_min + buffer_min
+        blocked[group][d].append((start_with_buffer, end_with_buffer))
     return blocked
+
 
 def main():
     print_banner()
+
     # Prompt first
-    start_date, end_date, csv_path = prompt_user_options()
+    start_date, end_date, buffer_min = prompt_user_options()
 
     # Auth + read sheet
     creds = Credentials.from_service_account_file(
@@ -242,46 +270,46 @@ def main():
     ws = gc.open_by_key(SHEET_ID).worksheet(SCHEDULE_TAB)
     rows = ws.get_all_records()
 
-    # Build blocked intervals per date from rows
-    blocked_by_date = collect_blocked_intervals_by_date(rows, start_date, end_date)
+    # Build blocked intervals per GROUP per DATE
+    blocked_by_group = collect_blocked_by_group_and_date(rows, start_date, end_date, buffer_min)
 
-    print(f"\n=== Availability (excluding Sundays, Jan 1, Dec 25) {start_date} → {end_date} ===\n")
-    availability_rows = []
-    any_output = False
+    print(f"\n=== Availability (excluding Sundays, Jan 1, Dec 25) {start_date} → {end_date} ===")
+    print(f"Buffer applied: {buffer_min // 60} hour(s)\n")
 
-    for d in daterange(start_date, end_date):
-        if is_blocked_date(d):
-            continue
+    # Which groups actually appear in the window?
+    groups_present = sorted(blocked_by_group.keys() or [GROUP_DEFAULT])
 
-        blocked = blocked_by_date.get(d, [])
-        avail = complement_within_day(blocked)
+    any_output_overall = False
 
-        if not avail:
-            line = f"{d.isoformat()} ({d.strftime('%a')}): No availability"
+    for group in groups_present:
+        print(f"🎵 {group}")
+        any_output_group = False
+
+        for d in daterange(start_date, end_date):
+            if is_blocked_date(d):
+                continue
+
+            blocked = blocked_by_group.get(group, {}).get(d, [])
+            avail = complement_within_day(blocked)
+
+            if not avail:
+                line = f"{d.isoformat()} ({d.strftime('%a')}): No availability"
+                print(line)
+                continue
+
+            pieces = [f"{format_minutes(s)}–{format_minutes(e)}" for s, e in avail]
+            joined = ", ".join(pieces)
+            line = f"{d.isoformat()} ({d.strftime('%a')}): {joined}"
             print(line)
-            availability_rows.append((d.isoformat(), d.strftime('%a'), ""))
-            continue
+            any_output_group = True
+            any_output_overall = True
 
-        pieces = [f"{format_minutes(s)}–{format_minutes(e)}" for s, e in avail]
-        joined = ", ".join(pieces)
-        line = f"{d.isoformat()} ({d.strftime('%a')}): {joined}"
-        print(line)
-        availability_rows.append((d.isoformat(), d.strftime('%a'), joined))
-        any_output = True
+        if not any_output_group:
+            print("(No availability days for this group in the selected window.)")
+        print()  # spacer between groups
 
-    if not any_output:
-        print("No availability in this window.")
-
-    if csv_path:
-        try:
-            import csv
-            with open(csv_path, "w", newline="") as f:
-                w = csv.writer(f)
-                w.writerow(["Date", "DayOfWeek", "AvailableRanges"])
-                w.writerows(availability_rows)
-            print(f"\nCSV written to: {csv_path}")
-        except Exception as e:
-            print(f"\n⚠️ CSV write failed: {e}")
+    if not any_output_overall:
+        print("No availability in this window for any group.")
 
 if __name__ == "__main__":
     main()

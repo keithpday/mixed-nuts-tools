@@ -5,7 +5,7 @@ According to our records, the following invoice(s) remain open. Could you please
 
 Invoice # | Invoice Date | Amount | Payments | Balance | Age
 ---|---|---|---|---|---
-466SSL | 2025-02-14 | $80 | — | $80 | 241 days (60+ days)
+466SSL | 2025-02-14 | $80 | — | $80 | 256 days (60+ days)
 
 Total outstanding balance for Sunrise Sr Lvg = $80.
 

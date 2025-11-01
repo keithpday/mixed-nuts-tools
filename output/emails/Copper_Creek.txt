@@ -5,9 +5,10 @@ According to our records, the following invoice(s) remain open. Could you please
 
 Invoice # | Invoice Date | Amount | Payments | Balance | Age
 ---|---|---|---|---|---
-648CC | 2025-08-15 | $240 | — | $240 | 59 days (30+ days)
+648CC | 2025-08-15 | $240 | — | $240 | 74 days (60+ days)
+711CC | 2025-10-17 | $240 | — | $240 | 11 days
 
-Total outstanding balance for Copper Creek = $240.
+Total outstanding balance for Copper Creek = $480.
 
 Thanks so much,
 Keith Day
