@@ -614,3 +614,126 @@
 2025-11-08 10:25:32  Editor closed; last item on screen was option 1003 - git_commit.sh  (after coding, step #2 commit (it should prompt for a message))
 2025-11-08 10:25:38  Running option 1003: git_commit.sh  (after coding, step #2 commit (it should prompt for a message))
 2025-11-08 10:25:38  Launching in foreground for option 1003: git_commit.sh  (after coding, step #2 commit (it should prompt for a message))
+2025-11-08 10:25:54  Running option 1004: git_push.sh  (after coding, step #3 to send it up to GitHub.
+2025-11-08 10:25:54  Launching in foreground for option 1004: git_push.sh  (after coding, step #3 to send it up to GitHub.
+2025-11-08 10:25:59  Running option 1005: git_open_repo.sh (to look at things online)
+2025-11-08 10:25:59  Launching in foreground for option 1005: git_open_repo.sh (to look at things online)
+2025-11-08 10:27:49  Running option 4: Make and Upload a New Book
+2025-11-08 10:27:49  Launching in foreground for option 4: Make and Upload a New Book
+2025-11-08 10:27:54  Running option 3: Upload Set Publish Stage Files
+2025-11-08 10:27:54  Launching in foreground for option 3: Upload Set Publish Stage Files
+2025-11-08 10:28:02  Running option 2: Convert Narration Docs To PDFs and Optionally Copy To Set
+2025-11-08 10:28:02  Launching in foreground for option 2: Convert Narration Docs To PDFs and Optionally Copy To Set
+2025-11-08 10:28:10  Running option 5: Weekly Gig Reminder Email
+2025-11-08 10:28:10  Launching in foreground for option 5: Weekly Gig Reminder Email
+2025-11-08 10:28:17  Running option 5: Weekly Gig Reminder Email
+2025-11-08 10:28:17  Launching in foreground for option 5: Weekly Gig Reminder Email
+2025-11-08 10:28:25  Running option 10: Job Scheduler Console
+2025-11-08 10:28:25  Launching in foreground for option 10: Job Scheduler Console
+2025-11-08 10:31:38  Running option 10: Job Scheduler Console
+2025-11-08 10:31:38  Launching in foreground for option 10: Job Scheduler Console
+2025-11-08 10:34:34  Running option 101: Peek at Cron Jobs
+2025-11-08 10:34:34  Launching in foreground for option 101: Peek at Cron Jobs
+2025-11-08 10:35:31  Running option 10: Job Scheduler Console
+2025-11-08 10:35:31  Launching in foreground for option 10: Job Scheduler Console
+2025-11-08 10:36:43  Menu launcher closed.
+2025-11-08 12:25:06  Launching menu_launcher_v3.py
+2025-11-08 12:25:06  Menu launcher started.
+2025-11-08 12:25:11  Running option 101: Peek at Cron Jobs
+2025-11-08 12:25:11  Launching in foreground for option 101: Peek at Cron Jobs
+2025-11-08 12:27:41  Launching menu_launcher_v3.py
+2025-11-08 12:27:41  Menu launcher started.
+2025-11-08 12:27:49  Running option 101: Peek at Cron Jobs
+2025-11-08 12:27:49  Launching in foreground for option 101: Peek at Cron Jobs
+2025-11-08 12:27:59  Running option 101: Peek at Cron Jobs
+2025-11-08 12:27:59  Launching in foreground for option 101: Peek at Cron Jobs
+2025-11-08 12:28:09  Running option 1: Edit Menu Items
+2025-11-08 12:28:09  Launching in foreground for option 1: Edit Menu Items
+2025-11-08 12:28:27  Editor closed; last item on screen was option 10 - Job Scheduler Console
+2025-11-08 12:28:31  Running option 1: Edit Menu Items
+2025-11-08 12:28:31  Launching in foreground for option 1: Edit Menu Items
+2025-11-08 12:29:02  Editor closed; last item on screen was option 11 - Old scheduler
+2025-11-08 12:29:03  Running option 1005: git_open_repo.sh (to look at things online)
+2025-11-08 12:29:03  Launching in foreground for option 1005: git_open_repo.sh (to look at things online)
+2025-11-08 12:29:07  Running option 10: Job Scheduler Console
+2025-11-08 12:29:07  Launching in foreground for option 10: Job Scheduler Console
+2025-11-08 12:29:09  Running option 1005: git_open_repo.sh (to look at things online)
+2025-11-08 12:29:09  Launching in foreground for option 1005: git_open_repo.sh (to look at things online)
+2025-11-08 12:29:15  Running option 1: Edit Menu Items
+2025-11-08 12:29:15  Launching in foreground for option 1: Edit Menu Items
+2025-11-08 12:29:24  Running option 11: Old scheduler
+2025-11-08 12:29:31  Running option 1: Edit Menu Items
+2025-11-08 12:29:31  Launching in foreground for option 1: Edit Menu Items
+2025-11-08 12:30:51  Editor closed; last item on screen was option 11 - Old Job Scheduler Console
+2025-11-08 12:32:37  Editor closed; last item on screen was option 10 - JCron Job Console
+2025-11-08 12:32:46  Running option 1: Edit Menu Items
+2025-11-08 12:32:46  Launching in foreground for option 1: Edit Menu Items
+2025-11-08 12:32:59  Editor closed; last item on screen was option 10 - Cron Job Console
+2025-11-08 12:33:03  Running option 10: JCron Job Console
+2025-11-08 12:33:03  Launching in foreground for option 10: JCron Job Console
+2025-11-08 12:52:59  Running option 10: JCron Job Console
+2025-11-08 12:52:59  Launching in foreground for option 10: JCron Job Console
+2025-11-08 13:40:29  Running option 1: Edit Menu Items
+2025-11-08 13:40:29  Launching in foreground for option 1: Edit Menu Items
+2025-11-08 13:42:55  Editor closed; last item on screen was option 10 - Cron Job Console
+2025-11-08 13:43:20  Running option 10: JCron Job Console
+2025-11-08 13:43:20  Launching in foreground for option 10: JCron Job Console
+2025-11-08 13:43:27  Running option 1: Edit Menu Items
+2025-11-08 13:43:27  Launching in foreground for option 1: Edit Menu Items
+2025-11-08 13:43:36  Editor closed; last item on screen was option 10 - Cron Job Console
+2025-11-08 13:43:41  Running option 10: Cron Job Console
+2025-11-08 13:43:41  Launching in foreground for option 10: Cron Job Console
+2025-11-08 13:45:36  Running option 10: Cron Job Console
+2025-11-08 13:45:36  Launching in foreground for option 10: Cron Job Console
+2025-11-08 13:54:13  Running option 10: Cron Job Console
+2025-11-08 13:54:13  Launching in foreground for option 10: Cron Job Console
+2025-11-08 14:04:55  Running option 10: Cron Job Console
+2025-11-08 14:04:55  Launching in foreground for option 10: Cron Job Console
+2025-11-08 14:05:00  Running option 1: Edit Menu Items
+2025-11-08 14:05:00  Launching in foreground for option 1: Edit Menu Items
+2025-11-08 14:06:25  Editor closed; last item on screen was option 10 - Cron Job Console
+2025-11-08 14:44:57  Running option 1: Edit Menu Items
+2025-11-08 14:44:57  Launching in foreground for option 1: Edit Menu Items
+2025-11-08 14:45:06  Editor closed; last item on screen was option 10 - Cron Job Console
+2025-11-08 14:45:13  Running option 10: Cron Job Console
+2025-11-08 14:45:13  Launching in foreground for option 10: Cron Job Console
+2025-11-08 14:46:03  Running option 10: Cron Job Console
+2025-11-08 14:46:03  Launching in foreground for option 10: Cron Job Console
+2025-11-08 14:49:01  Running option 10: Cron Job Console
+2025-11-08 14:49:01  Launching in foreground for option 10: Cron Job Console
+2025-11-08 14:51:06  Running option 1005: git_open_repo.sh (to look at things online)
+2025-11-08 14:51:06  Launching in foreground for option 1005: git_open_repo.sh (to look at things online)
+2025-11-08 14:51:10  Running option 10: Cron Job Console
+2025-11-08 14:51:10  Launching in foreground for option 10: Cron Job Console
+2025-11-08 15:21:17  Running option 1: Edit Menu Items
+2025-11-08 15:21:17  Launching in foreground for option 1: Edit Menu Items
+2025-11-08 15:21:32  Editor closed; last item on screen was option 10 - Cron Job Console
+2025-11-08 15:21:34  Running option 1005: git_open_repo.sh (to look at things online)
+2025-11-08 15:21:34  Launching in foreground for option 1005: git_open_repo.sh (to look at things online)
+2025-11-08 15:21:38  Menu launcher closed.
+2025-11-08 15:22:01  Launching menu_launcher_v3.py
+2025-11-08 15:22:01  Menu launcher started.
+2025-11-08 15:22:06  Running option 10: Cron Job Console
+2025-11-08 15:22:06  Launching in foreground for option 10: Cron Job Console
+2025-11-08 15:30:22  Running option 1: Edit Menu Items
+2025-11-08 15:30:22  Launching in foreground for option 1: Edit Menu Items
+2025-11-08 15:30:45  Editor closed; last item on screen was option 10 - Cron Job Console
+2025-11-08 15:31:07  Running option 1: Edit Menu Items
+2025-11-08 15:31:07  Launching in foreground for option 1: Edit Menu Items
+2025-11-08 15:31:26  Editor closed; last item on screen was option 10 - Cron Job Console
+2025-11-08 15:31:34  Running option 10: Cron Job Console
+2025-11-08 15:31:34  Launching in foreground for option 10: Cron Job Console
+2025-11-08 15:33:02  Running option 10: Cron Job Console
+2025-11-08 15:33:02  Launching in foreground for option 10: Cron Job Console
+2025-11-08 15:45:49  Running option 10: Cron Job Console
+2025-11-08 15:45:49  Launching in foreground for option 10: Cron Job Console
+2025-11-08 16:16:34  Running option 10: Cron Job Console
+2025-11-08 16:16:34  Launching in foreground for option 10: Cron Job Console
+2025-11-08 16:32:30  Running option 1005: git_open_repo.sh (to look at things online)
+2025-11-08 16:32:30  Launching in foreground for option 1005: git_open_repo.sh (to look at things online)
+2025-11-08 16:32:34  Running option 1001: git_status_option_add.sh (after coding, step #0 to check changes with option to add)
+2025-11-08 16:32:34  Launching in foreground for option 1001: git_status_option_add.sh (after coding, step #0 to check changes with option to add)
+2025-11-08 16:32:45  Running option 1002: git_pull.sh (#1. before coding, to make sure your local copy is up to date)
+2025-11-08 16:32:45  Launching in foreground for option 1002: git_pull.sh (#1. before coding, to make sure your local copy is up to date)
+2025-11-08 16:32:49  Running option 1003: git_commit.sh  (after coding, step #2 commit (it should prompt for a message))
+2025-11-08 16:32:49  Launching in foreground for option 1003: git_commit.sh  (after coding, step #2 commit (it should prompt for a message))
