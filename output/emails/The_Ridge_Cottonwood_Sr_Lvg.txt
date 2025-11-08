@@ -3,13 +3,15 @@ Hi Cristi,
 Thanks again for having The Mixed Nuts perform!
 According to our records, the following invoice(s) remain open. Could you please review and confirm payment status?
 
-Invoice # | Invoice Date | Amount | Payments | Balance | Age
+Invoice # | Date | Amount | Payments | Balance | Age
 ---|---|---|---|---|---
-466TRCSL | 2025-02-14 | $230 | — | $230 | 256 days (60+ days)
-599TRCSL | 2025-06-27 | $240 | — | $240 | 123 days (60+ days)
-690TRCSL | 2025-09-26 | $240 | — | $240 | 32 days (30+ days)
+466TRCSL | 2025-02-14 | $230 | — | $230 | 260 days
+599TRCSL | 2025-06-27 | $240 | — | $240 | 127 days
+690TRCSL | 2025-09-26 | $240 | — | $240 | 36 days
 
 Total outstanding balance for The Ridge Cottonwood Sr Lvg = $710.
+
+Please let me know if you have any questions or if payment has already been processed.
 
 Thanks so much,
 Keith Day

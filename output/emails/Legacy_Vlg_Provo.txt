@@ -5,7 +5,7 @@ According to our records, the following invoice(s) remain open. Could you please
 
 Invoice # | Invoice Date | Amount | Payments | Balance | Age
 ---|---|---|---|---|---
-718LVOP | 2025-10-24 | $360 | — | $360 | 4 days
+718LVOP | 2025-10-24 | $360 | — | $360 | 8 days
 
 Total outstanding balance for Legacy Vlg Provo = $360.
 

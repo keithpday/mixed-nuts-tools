@@ -3,11 +3,14 @@ Hi Rachel,
 Thanks again for having The Mixed Nuts perform!
 According to our records, the following invoice(s) remain open. Could you please review and confirm payment status?
 
-Invoice # | Invoice Date | Amount | Payments | Balance | Age
+Invoice # | Date | Amount | Payments | Balance | Age
 ---|---|---|---|---|---
-667LVOS | 2025-09-03 | $200 | — | $200 | 55 days (30+ days)
+667LVOS | 2025-09-03 | $200 | — | $200 | 59 days
 
 Total outstanding balance for Legacy Village Of Sugarhouse = $200.
+I've attached copies of the invoice(s) for your convenience. You should have received these previously, but I thought it would help to include them again.
+
+Please let me know if you have any questions or if payment has already been processed.
 
 Thanks so much,
 Keith Day

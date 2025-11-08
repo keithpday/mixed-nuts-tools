@@ -4,13 +4,13 @@ email_merge_v3.py — Dynamic YAMM-style email merge using Google Sheets + Googl
 
 NEW IN V3:
 - Template lookup from a "DocLink" sheet.
-  Each row in that tab should look like:
-    Template | Link | Comment
-  Example:
-    INVOICE  | https://docs.google.com/document/d/1AbCdEfGhIjKlMnOpQr/edit | Standard invoice template
-- Your main sheet should have a "Template" column with one of the names from DocLink!A2:A.
-- The full URL or Doc ID works for the Link.
-- The program no longer takes --template-doc-id as an argument.
+- Supports multi-template mapping from a DocLink tab.
+- Auto-exports templates to HTML and sends via Gmail.
+
+NEW IN V3.2 (Nov 2025):
+- Added `--debug` flag for optional detailed logging and HTML dumps.
+  When enabled, intermediate HTML files and API operations are logged
+  to help diagnose formatting or authentication issues.
 
 (c) 2025 Keith Day / ChatGPT
 """
@@ -22,7 +22,7 @@ import os
 import re
 import sys
 from datetime import datetime
-from typing import Dict, List, Tuple, Optional
+from typing import Dict, Tuple, Optional
 
 from email.mime.text import MIMEText
 from email.mime.multipart import MIMEMultipart
@@ -38,13 +38,11 @@ from google_auth_oauthlib.flow import InstalledAppFlow
 from google.auth.transport.requests import Request
 
 # ---------------- CONFIG ----------------
-# Use a dedicated token so this script’s OAuth scopes don't collide with other tools
 DEFAULT_CREDENTIALS_FILE = os.environ.get(
     "GOOGLE_OAUTH_CLIENT",
     "/home/keith/PythonProjects/projects/Mixed_Nuts/config/credentials.json"
 )
 TOKEN_FILE = "/home/keith/PythonProjects/projects/Mixed_Nuts/config/email_merge_v3_token.json"
-
 DOC_LINK_TAB_NAME = "DocLink"
 
 SCOPES = [
@@ -53,42 +51,42 @@ SCOPES = [
     "https://www.googleapis.com/auth/gmail.send",
 ]
 
-# ---------------- UTILS ----------------
+# ---------------- LOGGING HELPERS ----------------
 
 def info(msg): print(f"[INFO]  {msg}")
 def warn(msg): print(f"[WARN]  {msg}")
 def error(msg): print(f"[ERROR] {msg}", file=sys.stderr)
+def now_stamp() -> str: return datetime.now().strftime("%Y-%m-%d %H:%M:%S")
 
-def now_stamp() -> str:
-    return datetime.now().strftime("%Y-%m-%d %H:%M:%S")
-
-def extract_doc_id_from_url(url: str) -> Optional[str]:
-    if not url:
-        return None
-    m = re.search(r"/d/([a-zA-Z0-9_-]+)", url)
-    if m:
-        return m.group(1)
-    return None
+def dbg(debug_enabled: bool, msg: str):
+    """Prints debug info only when debug mode is active."""
+    if debug_enabled:
+        print(f"[DEBUG] {msg}")
 
 # ---------------- AUTH ----------------
 
-def get_credentials(credentials_file: str = DEFAULT_CREDENTIALS_FILE, token_file: str = TOKEN_FILE) -> Credentials:
+def get_credentials(credentials_file: str, token_file: str, debug=False) -> Credentials:
     creds = None
     if os.path.exists(token_file):
+        dbg(debug, f"Loading cached credentials from {token_file}")
         creds = Credentials.from_authorized_user_file(token_file, SCOPES)
     if not creds or not creds.valid:
         if creds and creds.expired and creds.refresh_token:
+            dbg(debug, "Refreshing expired credentials")
             creds.refresh(Request())
         else:
+            dbg(debug, "Running OAuth flow to obtain new credentials")
             flow = InstalledAppFlow.from_client_secrets_file(credentials_file, SCOPES)
             creds = flow.run_local_server(port=0)
         with open(token_file, "w") as token:
             token.write(creds.to_json())
+            dbg(debug, f"Saved refreshed token to {token_file}")
     return creds
 
-# ---------------- SHEETS HELPERS ----------------
+# ---------------- SHEETS ----------------
 
-def load_sheet_rows(sheets_service, sheet_id: str, a1_range: str):
+def load_sheet_rows(sheets_service, sheet_id: str, a1_range: str, debug=False):
+    dbg(debug, f"Fetching sheet range: {a1_range}")
     result = sheets_service.spreadsheets().values().get(
         spreadsheetId=sheet_id, range=a1_range
     ).execute()
@@ -97,9 +95,11 @@ def load_sheet_rows(sheets_service, sheet_id: str, a1_range: str):
         raise RuntimeError("Sheet range returned no values.")
     headers = values[0]
     rows = values[1:]
+    dbg(debug, f"Loaded {len(rows)} data rows, {len(headers)} headers")
     return headers, rows
 
-def update_sheet_cell(sheets_service, sheet_id: str, a1_cell: str, value: str):
+def update_sheet_cell(sheets_service, sheet_id: str, a1_cell: str, value: str, debug=False):
+    dbg(debug, f"Updating sheet cell {a1_cell} with value '{value}'")
     body = {"values": [[value]]}
     sheets_service.spreadsheets().values().update(
         spreadsheetId=sheet_id,
@@ -108,12 +108,11 @@ def update_sheet_cell(sheets_service, sheet_id: str, a1_cell: str, value: str):
         body=body
     ).execute()
 
-def load_doclink_map(sheets_service, sheet_id: str) -> Dict[str, str]:
-    """Reads DocLink tab → returns {template_name: doc_id_or_link}"""
+def load_doclink_map(sheets_service, sheet_id: str, debug=False) -> Dict[str, str]:
     try:
+        dbg(debug, f"Loading DocLink tab: {DOC_LINK_TAB_NAME}")
         result = sheets_service.spreadsheets().values().get(
-            spreadsheetId=sheet_id,
-            range=f"{DOC_LINK_TAB_NAME}!A2:C"
+            spreadsheetId=sheet_id, range=f"{DOC_LINK_TAB_NAME}!A2:C"
         ).execute()
     except HttpError as e:
         error(f"Could not load DocLink tab: {e}")
@@ -123,25 +122,16 @@ def load_doclink_map(sheets_service, sheet_id: str) -> Dict[str, str]:
     for r in rows:
         if len(r) < 2:
             continue
-        name = r[0].strip()
-        link = r[1].strip()
+        name, link = r[0].strip(), r[1].strip()
         if name and link:
             mapping[name] = extract_doc_id_from_url(link) or link
+    dbg(debug, f"Loaded {len(mapping)} templates from DocLink")
     return mapping
 
-# ---------------- DRIVE HELPERS ----------------
+# ---------------- DRIVE ----------------
 
-def export_doc_as_text(drive_service, doc_id: str) -> str:
-    request = drive_service.files().export_media(fileId=doc_id, mimeType="text/plain")
-    buf = io.BytesIO()
-    downloader = MediaIoBaseDownload(buf, request)
-    done = False
-    while not done:
-        _, done = downloader.next_chunk()
-    buf.seek(0)
-    return buf.read().decode("utf-8", errors="replace")
-
-def export_doc_as_html(drive_service, doc_id: str) -> str:
+def export_doc_as_html(drive_service, doc_id: str, debug=False) -> str:
+    dbg(debug, f"Exporting Google Doc {doc_id} as HTML")
     request = drive_service.files().export_media(fileId=doc_id, mimeType="text/html")
     buf = io.BytesIO()
     downloader = MediaIoBaseDownload(buf, request)
@@ -149,12 +139,14 @@ def export_doc_as_html(drive_service, doc_id: str) -> str:
     while not done:
         _, done = downloader.next_chunk()
     buf.seek(0)
-    return buf.read().decode("utf-8", errors="replace")
+    html = buf.read().decode("utf-8", errors="replace")
+    dbg(debug, f"Downloaded {len(html)} bytes of HTML")
+    return html
 
-def export_doc_as_pdf_bytes(drive_service, doc_id: str) -> Tuple[bytes, str]:
+def export_doc_as_pdf_bytes(drive_service, doc_id: str, debug=False) -> Tuple[bytes, str]:
     meta = drive_service.files().get(fileId=doc_id, fields="id, name, mimeType").execute()
-    mimeType = meta.get("mimeType", "")
-    name = meta.get("name", "Attachment")
+    name, mimeType = meta.get("name", "Attachment"), meta.get("mimeType", "")
+    dbg(debug, f"Exporting attachment '{name}' ({mimeType})")
     buf = io.BytesIO()
     if mimeType.startswith("application/vnd.google-apps"):
         request = drive_service.files().export_media(fileId=doc_id, mimeType="application/pdf")
@@ -165,26 +157,21 @@ def export_doc_as_pdf_bytes(drive_service, doc_id: str) -> Tuple[bytes, str]:
     while not done:
         _, done = downloader.next_chunk()
     buf.seek(0)
+    data = buf.read()
     if not name.lower().endswith(".pdf"):
         name += ".pdf"
-    return buf.read(), name
+    dbg(debug, f"Exported PDF bytes: {len(data)} bytes, filename: {name}")
+    return data, name
 
-# ---------------- TEMPLATE PARSING ----------------
+# ---------------- UTILITIES ----------------
+
+def extract_doc_id_from_url(url: str) -> Optional[str]:
+    if not url:
+        return None
+    m = re.search(r"/d/([a-zA-Z0-9_-]+)", url)
+    return m.group(1) if m else None
 
 PLACEHOLDER_RE = re.compile(r"{{\s*([^}]+?)\s*}}")
-
-def split_subject_and_body(template_text: str):
-    lines = template_text.splitlines()
-    subject = None
-    subject_idx = None
-    for i, line in enumerate(lines):
-        cleaned = line.lstrip("\ufeff").strip()
-        if cleaned.lower().startswith("subject:"):
-            subject = cleaned.split(":", 1)[1].strip()
-            subject_idx = i
-            break
-    body = "\n".join(lines[subject_idx + 1:]).lstrip("\n") if subject_idx is not None else template_text
-    return subject, body
 
 def substitute_placeholders(text: str, row_dict: Dict[str, str], *, warn_subject_blanks=False, context=""):
     warnings, errors = [], []
@@ -200,9 +187,18 @@ def substitute_placeholders(text: str, row_dict: Dict[str, str], *, warn_subject
         return val
     return PLACEHOLDER_RE.sub(repl, text), warnings, errors
 
+def colnum_to_a1(n: int) -> str:
+    """Convert a 1-based column index to Excel-style A1 notation."""
+    result = ""
+    while n > 0:
+        n, remainder = divmod(n - 1, 26)
+        result = chr(65 + remainder) + result
+    return result
+
 # ---------------- EMAIL ----------------
 
-def build_email(to_email, subject, body, attachments, *, html=False):
+def build_email(to_email, subject, body, attachments, *, html=False, debug=False):
+    dbg(debug, f"Building email to {to_email} with {len(attachments)} attachments")
     if attachments:
         msg = MIMEMultipart()
         msg["To"], msg["Subject"] = to_email, subject
@@ -219,84 +215,54 @@ def build_email(to_email, subject, body, attachments, *, html=False):
         msg["To"], msg["Subject"] = to_email, subject
         return msg.as_bytes()
 
-def gmail_send(gmail_service, raw_bytes: bytes):
+def gmail_send(gmail_service, raw_bytes: bytes, debug=False):
+    dbg(debug, "Sending email via Gmail API")
     raw = base64.urlsafe_b64encode(raw_bytes).decode("utf-8")
     return gmail_service.users().messages().send(userId="me", body={"raw": raw}).execute()
-
-def col_letter_to_index(letter: str) -> int:
-    letter = letter.upper()
-    n = 0
-    for ch in letter:
-        n = n * 26 + (ord(ch) - ord('A') + 1)
-    return n
-
-def index_to_col_letter(index: int) -> str:
-    result = ""
-    while index > 0:
-        index, rem = divmod(index - 1, 26)
-        result = chr(65 + rem) + result
-    return result
-
-def a1_for_cell(range_a1: str, row_idx_1based: int, col_idx_1based: int) -> str:
-    """
-    Compute a proper A1 reference (Sheet!ColRow) for a given data cell.
-    Works reliably even if the base range omits row numbers (e.g. 'A:Z' or 'A1:BH').
-    """
-    sheet_name = ""
-    if "!" in range_a1:
-        sheet_name, range_part = range_a1.split("!", 1)
-    else:
-        range_part = range_a1
-
-    # Extract first column from the left edge of range (default A1)
-    left = range_part.split(":")[0]
-    m = re.match(r"([A-Za-z]+)(\d*)", left)
-    base_col_letter = m.group(1) if m else "A"
-    base_row = int(m.group(2)) if (m and m.group(2)) else 1
-
-    base_col_idx = col_letter_to_index(base_col_letter)
-    target_col_letter = index_to_col_letter(base_col_idx + col_idx_1based - 1)
-    target_row = base_row + row_idx_1based - 1
-
-    a1_ref = f"{target_col_letter}{target_row}"
-    return f"{sheet_name}!{a1_ref}" if sheet_name else a1_ref
-
 
 # ---------------- MAIN ----------------
 
 def main():
-    parser = argparse.ArgumentParser(description="Email merge V3: dynamic template lookup via DocLink tab.")
+    parser = argparse.ArgumentParser(description="Email merge V3 with DocLink templates and debug logging.")
     parser.add_argument("--credentials", default=DEFAULT_CREDENTIALS_FILE)
     parser.add_argument("--token", default=TOKEN_FILE)
     parser.add_argument("--sheet-id", required=True)
     parser.add_argument("--range", required=True)
     parser.add_argument("--to-col", required=True)
     parser.add_argument("--selector-col", required=True)
-    parser.add_argument("--template-col", default="Template", help="Column header name containing the template name (default: Template)")
+    parser.add_argument("--template-col", default="Template")
     parser.add_argument("--att-col", action="append", default=[])
     parser.add_argument("--mode", choices=["test", "final"], default="test")
     parser.add_argument("--test-to")
     parser.add_argument("--only-row", type=int)
     parser.add_argument("--rate-sleep", type=float, default=0.0)
+    parser.add_argument("--prompt-each", choices=["y", "n"], default="n")
+    parser.add_argument("--prompt-col", default=None)
+    parser.add_argument("--debug", action="store_true", help="Enable debug logging and raw HTML dumps")
     args = parser.parse_args()
 
     if args.mode == "test" and not args.test_to:
         parser.error("--test-to required in test mode")
 
-    creds = get_credentials(args.credentials, args.token)
+    debug = args.debug
+
+    creds = get_credentials(args.credentials, args.token, debug)
     sheets_service = build("sheets", "v4", credentials=creds)
     drive_service = build("drive", "v3", credentials=creds)
     gmail_service = build("gmail", "v1", credentials=creds)
 
-    doclink_map = load_doclink_map(sheets_service, args.sheet_id)
+    doclink_map = load_doclink_map(sheets_service, args.sheet_id, debug)
     info(f"Loaded {len(doclink_map)} template(s) from DocLink tab.")
 
-    headers, data_rows = load_sheet_rows(sheets_service, args.sheet_id, args.range)
+    headers, data_rows = load_sheet_rows(sheets_service, args.sheet_id, args.range, debug)
     header_to_idx = {h: i for i, h in enumerate(headers)}
 
     for needed in [args.to_col, args.selector_col, args.template_col]:
         if needed not in header_to_idx:
             raise RuntimeError(f"Required column '{needed}' not found in headers.")
+
+    prompt_each = args.prompt_each.lower().startswith("y")
+    prompt_col_name = args.prompt_col
 
     total = sent = skipped = errors_count = 0
     base_visible_row_index = 2
@@ -304,8 +270,11 @@ def main():
     for r_index, row in enumerate(data_rows, start=1):
         total += 1
         visible_row_number = base_visible_row_index + r_index - 1
-
         row_dict = {h: (row[i] if i < len(row) else "") for h, i in header_to_idx.items()}
+
+        if args.only_row and visible_row_number != args.only_row:
+            continue
+
         sel_val = row_dict.get(args.selector_col, "").strip()
         if sel_val.lower().startswith("test sent") or re.match(r"^\d{4}-\d{2}-\d{2}", sel_val):
             skipped += 1
@@ -325,22 +294,38 @@ def main():
             warn(f"Row {visible_row_number}: template '{template_name}' not found in DocLink -> SKIP")
             continue
 
-        # Load template (HTML body + use Doc name as subject, with substitutions)
-        meta = drive_service.files().get(fileId=template_id, fields="name").execute()
-        subject_template = meta.get("name", "(Untitled Template)")
+        dbg(debug, f"Row {visible_row_number}: Using template '{template_name}' ({template_id})")
 
-        # Export HTML body
-        body_template = export_doc_as_html(drive_service, template_id)
+        body_template = export_doc_as_html(drive_service, template_id, debug)
 
-        # Clean up HTML (remove embedded styles/margins)
+        # Dump raw HTML if debugging
+        if debug:
+            raw_path = f"/tmp/raw_email_row{visible_row_number}.html"
+            with open(raw_path, "w", encoding="utf-8") as f:
+                f.write(body_template)
+            dbg(debug, f"Wrote raw HTML to {raw_path}")
+
+        # Cleanup HTML
         body_template = re.sub(r"<style.*?>.*?</style>", "", body_template, flags=re.DOTALL | re.IGNORECASE)
         body_template = re.sub(r'style="[^"]*margin[^"]*"', "", body_template, flags=re.IGNORECASE)
+        body_template = re.sub(r'max-width:[^;"]*;?', '', body_template, flags=re.IGNORECASE)
+        body_template = re.sub(r'padding:[^;"]*;?', '', body_template, flags=re.IGNORECASE)
 
-        # Apply substitutions
-        subject, _, _ = substitute_placeholders(subject_template or "", row_dict, warn_subject_blanks=True, context=f"row {visible_row_number} subject")
-        body, _, _ = substitute_placeholders(body_template or "", row_dict, context=f"row {visible_row_number} body")
+        if debug:
+            clean_path = f"/tmp/clean_email_row{visible_row_number}.html"
+            with open(clean_path, "w", encoding="utf-8") as f:
+                f.write(body_template)
+            dbg(debug, f"Wrote cleaned HTML to {clean_path}")
 
+        meta = drive_service.files().get(fileId=template_id, fields="name").execute()
+        subject_template = meta.get("name", "(Untitled Template)")
+        subject, _, _ = substitute_placeholders(subject_template or "", row_dict, warn_subject_blanks=True)
 
+        # ✅ Prepend [TEST] to subject line in test mode
+        if args.mode == "test":
+            subject = f"[TEST] {subject}"
+
+        body, _, _ = substitute_placeholders(body_template or "", row_dict)
 
         attachments = []
         for att_col in args.att_col:
@@ -349,22 +334,36 @@ def main():
                 if doc_link:
                     doc_id = extract_doc_id_from_url(doc_link) or doc_link
                     try:
-                        data, fname = export_doc_as_pdf_bytes(drive_service, doc_id)
+                        data, fname = export_doc_as_pdf_bytes(drive_service, doc_id, debug)
                         attachments.append((data, fname))
                         info(f"Row {visible_row_number}: attaching {fname}")
                     except HttpError as e:
                         warn(f"Row {visible_row_number}: failed to export attachment -> {e}")
 
-        raw_bytes = build_email(to_email, subject, body, attachments, html=True)
-        gmail_send(gmail_service, raw_bytes)
+        if prompt_each:
+            prompt_info = row_dict.get(prompt_col_name, "") if prompt_col_name else ""
+            print(f"\nRow {visible_row_number}: about to send to {to_email}")
+            if prompt_info:
+                print(f"Prompt info ({prompt_col_name}): {prompt_info}")
+            choice = input("Send this email? (y/n, default y): ").strip().lower() or "y"
+            if choice not in ("y", "yes"):
+                info(f"Row {visible_row_number}: skipped by user choice")
+                skipped += 1
+                continue
+
+        raw_bytes = build_email(to_email, subject, body, attachments, html=True, debug=debug)
+        gmail_send(gmail_service, raw_bytes, debug)
         sent += 1
         info(f"Row {visible_row_number}: SENT to {to_email} | Subject: {subject}")
 
+        # --- UPDATED SECTION: safely update selector column with send date ---
         stamp = f"TEST SENT {now_stamp()}" if args.mode == "test" else now_stamp()
         sel_col_idx = header_to_idx[args.selector_col] + 1
-        a1_cell = a1_for_cell(args.range, visible_row_number, sel_col_idx)
-        update_sheet_cell(sheets_service, args.sheet_id, a1_cell, stamp)
-        info(f"Row {visible_row_number}: wrote stamp to {a1_cell}")
+        sel_col_letter = colnum_to_a1(sel_col_idx)
+        sheet_name = args.range.split('!')[0]
+        a1_cell = f"{sheet_name}!{sel_col_letter}{visible_row_number}"
+        update_sheet_cell(sheets_service, args.sheet_id, a1_cell, stamp, debug)
+        # ---------------------------------------------------------------
 
     info("---- SUMMARY ----")
     info(f"Processed: {total}")

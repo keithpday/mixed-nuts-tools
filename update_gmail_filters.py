@@ -16,8 +16,10 @@ from googleapiclient.errors import HttpError
 CONTACT_LABELS = ["SafeInbox", "NonSafeInbox"]
 FILTER_PREFIX = "[AUTO-FILTER]"
 CHUNK_SIZE = 40
-TOKEN_FILE = "/home/keith/PythonProjects/projects/Mixed_Nuts/config/token_gmail.json"
+PROGRAM_NAME = os.path.splitext(os.path.basename(__file__))[0]
+TOKEN_FILE = f"/home/keith/PythonProjects/projects/Mixed_Nuts/config/{PROGRAM_NAME}_token.json"
 print(f"🔐 Using token file: {TOKEN_FILE}")
+
 CREDENTIALS_FILE = "/home/keith/PythonProjects/projects/Mixed_Nuts/config/credentials.json"
 
 # Gmail + Contacts scopes

@@ -4,360 +4,279 @@ collections_report_generator.py
 --------------------------------
 Generates and emails collection statements for The Mixed Nuts.
 
-Workflow:
-1) Prompt for Test (T) or Final (F) mode (case-insensitive).
-2) Generate draft emails from GenEnt + Rcvbles.
-3) Send via Gmail API:
-   - TEST: all to keith.day@legacyperformers.org, subject prefixed with [TEST]
-   - FINAL: to real recipients (AREmail Address). CONFIRMATION REQUIRED.
+Enhancements:
+-------------
+✅ Prompts for minimum days late (default 31).
+✅ Skips venues unless at least one invoice meets or exceeds that age.
+✅ Prompts before sending each email, showing venue, max days late, and total due.
+✅ Includes any "Intro Line" text found in the Rcvbles tab (matching by unique Invoice Number).
+✅ Attaches PDF invoice copies (from the "Attachment" column in the Rcvbles tab) for convenience.
+✅ Table is left-aligned and fixed-width for readability.
+✅ Only one Google authentication prompt per run.
 
-Args:
-  --spreadsheet <Google Sheet ID>
-  --journal-tab <Journal tab name> (e.g., GenEnt)
-  --rcvbles-tab <Receivables tab name> (e.g., Rcvbles)
-  --creds <path to credentials.json>
+How matching works:
+-------------------
+• The Journal tab (e.g., “GenEnt”) provides invoice and payment data.
+• The Rcvbles tab provides contact info, Intro Lines, and invoice attachments.
+• Invoices are matched using “DocNbr” in GenEnt == “ARInvoice Number” in Rcvbles.
+  This is a perfect one-to-one mapping in this system.
 """
 
 import os
 import sys
 import re
-import pandas as pd
+import base64
 import datetime as dt
+import pandas as pd
 from email.mime.text import MIMEText
 from email.mime.multipart import MIMEMultipart
-import base64
+from email.mime.base import MIMEBase
+from email import encoders
 from google_auth_oauthlib.flow import InstalledAppFlow
 from googleapiclient.discovery import build
+from googleapiclient.http import MediaIoBaseDownload
+from googleapiclient.errors import HttpError
+import io
 
-# ------------------ CONSTANTS ------------------
+# ---------------- CONSTANTS ----------------
 SCOPES = [
-    "https://www.googleapis.com/auth/spreadsheets",
+    "https://www.googleapis.com/auth/spreadsheets.readonly",
+    "https://www.googleapis.com/auth/drive.readonly",
     "https://www.googleapis.com/auth/gmail.send",
 ]
-
 OUTPUT_DIR = "/home/keith/PythonProjects/projects/Mixed_Nuts/output/emails"
 TEST_EMAIL = "keith.day@legacyperformers.org"
-START_DATE = dt.date(2023, 11, 7)  # invoice #1 base date
+START_DATE = dt.date(2023, 11, 7)
 
-# ------------------ AUTH ------------------
-def get_service(creds_path, api, version):
-    """Authorize and build a Google API service."""
+# ---------------- AUTH ----------------
+def get_services(creds_path):
+    """Authenticate once for Sheets, Drive, and Gmail."""
     flow = InstalledAppFlow.from_client_secrets_file(creds_path, SCOPES)
     creds = flow.run_local_server(port=0)
-    return build(api, version, credentials=creds)
+    sheets = build("sheets", "v4", credentials=creds)
+    drive = build("drive", "v3", credentials=creds)
+    gmail = build("gmail", "v1", credentials=creds)
+    return sheets, drive, gmail
 
-# ------------------ SHEETS HELPERS ------------------
-def read_sheet_values(service, spreadsheet_id: str, tab_name: str) -> pd.DataFrame:
-    """Read tab into DataFrame with normalized rows."""
+# ---------------- HELPERS ----------------
+def read_sheet(service, spreadsheet_id, tab_name):
     rng = f"{tab_name}!A:Z"
     resp = service.spreadsheets().values().get(spreadsheetId=spreadsheet_id, range=rng).execute()
     values = resp.get("values", [])
     if not values:
         return pd.DataFrame()
-    header = values[0]
-    rows = values[1:]
-    ncols = len(header)
-    normalized = [r + [""] * (ncols - len(r)) if len(r) < ncols else r[:ncols] for r in rows]
-    return pd.DataFrame(normalized, columns=header)
+    header = [h.strip() for h in values[0]]
+    rows = [r + [""] * (len(header) - len(r)) for r in values[1:]]
+    df = pd.DataFrame(rows, columns=header)
+    return df
 
-# ------------------ AR LOGIC ------------------
 def parse_money(x):
-    if x is None:
+    if not x:
         return 0.0
-    if isinstance(x, (int, float)):
-        return float(x)
-    s = str(x).strip().replace(",", "").replace("$", "")
+    s = str(x).replace("$", "").replace(",", "").strip()
     return float(s) if s else 0.0
 
-def numeric_prefix(docnbr: str):
-    if not isinstance(docnbr, str):
-        docnbr = "" if pd.isna(docnbr) else str(docnbr)
-    m = re.match(r"^(\d+)", docnbr.strip())
+def numeric_prefix(docnbr):
+    m = re.match(r"^(\d+)", str(docnbr).strip())
     return int(m.group(1)) if m else None
 
-def date_from_invoice(docnbr: str):
+def date_from_invoice(docnbr):
     n = numeric_prefix(docnbr)
-    if n is None:
-        return None
-    return START_DATE + dt.timedelta(days=(n - 1))
+    return START_DATE + dt.timedelta(days=(n - 1)) if n else None
 
-def normalize_venue_from_account(account: str) -> str:
-    if not isinstance(account, str):
-        return ""
-    a = account.strip()
-    return a[7:].strip() if a.lower().startswith("rcvbls ") else a
+def download_pdf_from_drive(drive, url_or_id):
+    """Download file by ID (or extract ID from link)."""
+    m = re.search(r"/d/([a-zA-Z0-9_-]+)", url_or_id)
+    file_id = m.group(1) if m else url_or_id
+    try:
+        meta = drive.files().get(fileId=file_id, fields="name").execute()
+        name = meta["name"] + ".pdf" if not meta["name"].lower().endswith(".pdf") else meta["name"]
+        buf = io.BytesIO()
+        req = drive.files().get_media(fileId=file_id)
+        downloader = MediaIoBaseDownload(buf, req)
+        done = False
+        while not done:
+            _, done = downloader.next_chunk()
+        buf.seek(0)
+        return buf.read(), name
+    except HttpError as e:
+        print(f"  ⚠️  Could not download {url_or_id}: {e}")
+        return None, None
 
-# ------------------ EMAIL BUILD/SEND ------------------
-def make_html_email(intro_lines, table_rows, summary_line):
-    """Build an HTML email body with styled table; return (plain_text, html_text)."""
+def make_html_email(intro_lines, table_rows, summary_line, extra_lines):
+    """Compose nicely formatted HTML + text email."""
     plain = []
     plain.extend(intro_lines)
     plain.append("")
-    plain.append("Invoice # | Invoice Date | Amount | Payments | Balance | Age")
+    plain.append("Invoice # | Date | Amount | Payments | Balance | Age")
     plain.append("---|---|---|---|---|---")
     for r in table_rows:
         plain.append(" | ".join(r))
     plain.append("")
     plain.append(summary_line)
+    for ln in extra_lines:
+        plain.append(ln)
     plain.append("")
-    plain.append("Thanks so much,")
-    plain.append("Keith Day")
-    plain.append("Legacy Performers / The Mixed Nuts")
-    plain.append("📞 385-377-0451 (call or text anytime)")
+    plain.append("Thanks so much,\nKeith Day\nLegacy Performers / The Mixed Nuts\n📞 385-377-0451 (call or text anytime)")
     plain_text = "\n".join(plain)
 
     html_intro = "".join(f"<p style='margin:0 0 10px 0'>{line}</p>" for line in intro_lines)
     html_table_rows = "".join(
         "<tr>" +
-        "".join(f"<td style='border:1px solid #ddd;padding:6px;vertical-align:top'>{cell}</td>" for cell in row)
-        + "</tr>"
-        for row in table_rows
+        "".join(f"<td style='border:1px solid #ddd;padding:6px'>{cell}</td>" for cell in row)
+        + "</tr>" for row in table_rows
     )
+    html_extra = "".join(f"<p style='margin:10px 0'>{ln}</p>" for ln in extra_lines)
+
     html = f"""
-    <div style="font-family:Arial,Helvetica,sans-serif;font-size:14px;line-height:1.4;color:#222">
+    <div style="font-family:Arial,Helvetica,sans-serif;font-size:14px;color:#222;text-align:left">
       {html_intro}
-      <table style="border-collapse:collapse;width:100%;margin:10px 0">
+      <table style="border-collapse:collapse;margin:10px 0;text-align:left;width:auto;min-width:600px">
         <thead>
           <tr>
-            <th style="text-align:left;border:1px solid #ddd;padding:6px;background:#f7f7f7">Invoice #</th>
-            <th style="text-align:left;border:1px solid #ddd;padding:6px;background:#f7f7f7">Invoice Date</th>
-            <th style="text-align:left;border:1px solid #ddd;padding:6px;background:#f7f7f7">Amount</th>
-            <th style="text-align:left;border:1px solid #ddd;padding:6px;background:#f7f7f7">Payments</th>
-            <th style="text-align:left;border:1px solid #ddd;padding:6px;background:#f7f7f7">Balance</th>
-            <th style="text-align:left;border:1px solid #ddd;padding:6px;background:#f7f7f7">Age</th>
+            <th style='border:1px solid #ddd;padding:6px;background:#f7f7f7'>Invoice #</th>
+            <th style='border:1px solid #ddd;padding:6px;background:#f7f7f7'>Invoice Date</th>
+            <th style='border:1px solid #ddd;padding:6px;background:#f7f7f7'>Amount</th>
+            <th style='border:1px solid #ddd;padding:6px;background:#f7f7f7'>Payments</th>
+            <th style='border:1px solid #ddd;padding:6px;background:#f7f7f7'>Balance</th>
+            <th style='border:1px solid #ddd;padding:6px;background:#f7f7f7'>Age</th>
           </tr>
         </thead>
-        <tbody>
-          {html_table_rows}
-        </tbody>
+        <tbody>{html_table_rows}</tbody>
       </table>
-      <p style="margin:10px 0"><strong>{summary_line}</strong></p>
+      <p><strong>{summary_line}</strong></p>
+      {html_extra}
       <p style="margin:10px 0">Please let me know if you have any questions or if payment has already been processed.</p>
-      <p style="margin:0">Thanks so much,<br>
-      Keith Day<br>
-      Legacy Performers / The Mixed Nuts<br>
-      📞 385-377-0451 (call or text anytime)</p>
+      <p style="margin:0">Thanks so much,<br>Keith Day<br>Legacy Performers / The Mixed Nuts<br>📞 385-377-0451 (call or text anytime)</p>
     </div>
     """
     return plain_text, html
 
-def build_multipart_email(subject, plain_text, html_text, recipient):
-    msg = MIMEMultipart("alternative")
+def send_gmail(gmail, subject, plain_text, html_text, recipient, attachments):
+    msg = MIMEMultipart("mixed")
     msg["to"] = recipient
     msg["subject"] = subject
-    msg.attach(MIMEText(plain_text, "plain"))
-    msg.attach(MIMEText(html_text, "html"))
+    alt = MIMEMultipart("alternative")
+    alt.attach(MIMEText(plain_text, "plain"))
+    alt.attach(MIMEText(html_text, "html"))
+    msg.attach(alt)
+    for data, fname in attachments:
+        part = MIMEBase("application", "pdf")
+        part.set_payload(data)
+        encoders.encode_base64(part)
+        part.add_header("Content-Disposition", f'attachment; filename="{fname}"')
+        msg.attach(part)
     raw = base64.urlsafe_b64encode(msg.as_bytes()).decode()
-    return {"raw": raw}
+    gmail.users().messages().send(userId="me", body={"raw": raw}).execute()
 
-def send_gmail(gmail_service, subject, plain_text, html_text, recipient):
-    body = build_multipart_email(subject, plain_text, html_text, recipient)
-    gmail_service.users().messages().send(userId="me", body=body).execute()
-
-# ------------------ MAIN COLLECTION BUILDER ------------------
+# ---------------- MAIN ----------------
 def build_and_send(spreadsheet_id, journal_tab, rcvbles_tab, creds_path, mode):
+    sheets, drive, gmail = get_services(creds_path)
     today = dt.date.today()
+    os.makedirs(OUTPUT_DIR, exist_ok=True)
 
-    sheets_service = get_service(creds_path, "sheets", "v4")
-    gmail_service = get_service(creds_path, "gmail", "v1")
+    gl = read_sheet(sheets, spreadsheet_id, journal_tab)
+    rc = read_sheet(sheets, spreadsheet_id, rcvbles_tab)
 
-    gl = read_sheet_values(sheets_service, spreadsheet_id, journal_tab)
-    rc = read_sheet_values(sheets_service, spreadsheet_id, rcvbles_tab)
-    if gl.empty or rc.empty:
-        print("Error: Could not read data from sheets.")
-        sys.exit(1)
-
-    for col in ["Seq","Date","Description","Account","Debit","Credit","DocType","DocNbr","ExtDoc"]:
-        if col not in gl.columns:
-            gl[col] = ""
-    for col in ["ARInvoice Number","ARVenue","ARContact","ARFirst Name","AREmail Address"]:
-        if col not in rc.columns:
-            rc[col] = ""
+    # Normalize header spacing
+    gl.columns = [c.strip() for c in gl.columns]
+    rc.columns = [c.strip() for c in rc.columns]
 
     invs = gl[gl["DocType"] == "INV"].copy()
     pmts = gl[gl["DocType"].isin(["PMT", "ACH", "DEP", "ADJ", "CRN"])].copy()
 
-    os.makedirs(OUTPUT_DIR, exist_ok=True)
+    min_days = input("Enter minimum days late to include (default 31): ").strip()
+    min_days = int(min_days or 31)
 
-    invs["Venue"] = invs["Account"].map(normalize_venue_from_account)
-    pmts["Venue"] = pmts["Account"].map(normalize_venue_from_account)
-    venues = sorted(invs["Venue"].dropna().unique())
-
-    all_emails = []
-    sent_rows = []
+    venues = sorted(invs["Account"].apply(lambda a: a[7:].strip() if str(a).lower().startswith("rcvbls ") else str(a)).unique())
 
     for venue in venues:
-        inv_rows = invs[invs["Venue"] == venue].copy()
-        payments = pmts[pmts["Venue"] == venue].copy()
-
-        # ------------------------------
-        # Determine recipient by DocNbr ↔ ARInvoice Number
-        # ------------------------------
-        matched_rows = []
-        for _, inv in inv_rows.iterrows():
-            docnbr = str(inv.get("DocNbr", "")).strip()
-            if not docnbr:
-                continue
-            match = rc[rc["ARInvoice Number"].astype(str).str.strip() == docnbr]
-            if not match.empty:
-                matched_rows.append(match.iloc[0])
-
-        if matched_rows:
-            contact = pd.DataFrame(matched_rows).iloc[[0]]
-        else:
-            contact = pd.DataFrame()
-
-        # ------------------------------
-        # Extract contact info
-        # ------------------------------
-        first_name = ""
-        if not contact.empty:
-            first_name = str(contact.get("ARFirst Name", "").iloc[0]).strip().title()
-            if not first_name:
-                first_name = str(contact.get("ARContact", "").iloc[0]).strip().split()[0].title()
-        first_name = first_name or "there"
-
-        recipient_real = (
-            contact["AREmail Address"].iloc[0].strip()
-            if not contact.empty and "AREmail Address" in contact
-            else ""
-        )
-
-        if mode == "T":
-            recipient = TEST_EMAIL
-        else:
-            if recipient_real:
-                recipient = recipient_real
-            else:
-                print(f"⚠️  No email found for any invoice in venue '{venue}'. Defaulting to TEST email.")
-                recipient = TEST_EMAIL
-
-        # ------------------------------
-        # Build invoice rows
-        # ------------------------------
-        table_rows = []
-        total_due = 0
-        for _, inv in inv_rows.iterrows():
-            inv_num = inv.get("DocNbr", "")
-            inv_amt = parse_money(inv.get("Debit", 0)) - parse_money(inv.get("Credit", 0))
-            if inv_amt <= 0:
-                continue
-            inv_date = date_from_invoice(inv_num)
-            bal = inv_amt
-            pay_lines = []
-            subset = payments[payments["DocNbr"] == inv_num]
-            for _, p in subset.iterrows():
-                credit = parse_money(p.get("Credit", 0))
-                debit = parse_money(p.get("Debit", 0))
-                applied = credit - debit
-                if applied > 0:
-                    p_date = p.get("Date", "")
-                    p_ref = str(p.get("ExtDoc", "")).strip()
-                    pay_lines.append(f"{p_date} · {p_ref} · ${round(applied):,}" if p_ref else f"{p_date} · ${round(applied):,}")
-                    bal -= applied
-            if bal <= 0:
-                continue
-            total_due += max(0, bal)
-            age = (today - inv_date).days if inv_date else ""
-            overdue = "60+ days" if (isinstance(age, int) and age >= 60) else ("30+ days" if (isinstance(age, int) and age >= 30) else "")
-            payments_text = "; ".join(pay_lines) if pay_lines else "—"
-            table_rows.append([
-                str(inv_num),
-                inv_date.strftime("%Y-%m-%d") if inv_date else "—",
-                f"${round(inv_amt):,}",
-                payments_text,
-                f"${round(max(0, bal)):,}",
-                f"{age} days {'(' + overdue + ')' if overdue else ''}".strip()
-            ])
-
-        if not table_rows:
+        inv_rows = invs[invs["Account"].str.contains(venue, case=False, na=False)]
+        payments = pmts[pmts["Account"].str.contains(venue, case=False, na=False)]
+        if inv_rows.empty:
             continue
 
-        subject = "Friendly update on your Mixed Nuts performance invoices"
-        if mode == "T":
-            subject = "[TEST] " + subject
+        table_rows = []
+        total_due = 0
+        max_days = 0
+        attachments = []
+        intro_lines = []
 
-        intro_lines = [
-            f"Hi {(first_name or 'there')},",
-            "",
-            "Thanks again for having The Mixed Nuts perform!",
-            "According to our records, the following invoice(s) remain open. Could you please review and confirm payment status?",
-        ]
-        summary_line = f"Total outstanding balance for {venue} = ${round(total_due):,}."
-        plain_text, html_text = make_html_email(intro_lines, table_rows, summary_line)
-
-        filename = os.path.join(OUTPUT_DIR, f"{re.sub(r'[^A-Za-z0-9_.-]+','_', venue)}.txt")
-        with open(filename, "w", encoding="utf-8") as f:
-            f.write(plain_text)
-
-        all_emails.append({
-            "Subject": subject,
-            "Body": plain_text,
-            "Recipients": recipient,
-            "Venue": venue,
-            "_html": html_text,
-            "_rows": table_rows,
-            "_total": total_due,
-        })
-
-    # Confirm before sending FINAL
-    if mode == "F":
-        confirm = input("Are you sure you want to send FINAL emails to real recipients? (Y/N): ").strip().lower()
-        if confirm != "y":
-            print("Final send canceled. Exiting without sending.")
-            return
-
-    # Send loop
-    for e in all_emails:
-        subj, recipient, venue = e["Subject"], e["Recipients"], e["Venue"]
-        plain_text = e["Body"]
-        html_text = e["_html"]
-
-        if mode == "F":
-            rows = e.get("_rows", [])
-            total_due = e.get("_total", 0)
-            oldest_date = None
-            oldest_num = None
-            for r in rows:
-                try:
-                    inv_date = dt.datetime.strptime(r[1], "%Y-%m-%d").date()
-                except Exception:
-                    continue
-                if not oldest_date or inv_date < oldest_date:
-                    oldest_date = inv_date
-                    oldest_num = r[0]
-            age = (today - oldest_date).days if oldest_date else None
-
-            print(f"\nVenue: {venue}")
-            if oldest_date:
-                print(f"Oldest invoice: {oldest_num} ({oldest_date}) – {age} days old")
-            else:
-                print("Oldest invoice date could not be determined.")
-            print(f"Total outstanding: ${round(total_due):,}")
-
-            send_it = input("Send this reminder? (Y/N): ").strip().lower()
-            if send_it != "y":
-                print(f"  ❎ Skipped {venue}.")
+        for _, inv in inv_rows.iterrows():
+            docnbr = str(inv["DocNbr"]).strip()
+            amt = parse_money(inv["Debit"]) - parse_money(inv["Credit"])
+            if amt <= 0:
+                continue
+            inv_date = date_from_invoice(docnbr)
+            bal = amt
+            subset = payments[payments["DocNbr"] == docnbr]
+            for _, p in subset.iterrows():
+                bal -= max(0, parse_money(p["Credit"]) - parse_money(p["Debit"]))
+            if bal <= 0:
                 continue
 
-        print(f"Sending to {venue} ({recipient})...")
+            age = (today - inv_date).days if inv_date else 0
+            max_days = max(max_days, age)
+            total_due += bal
+            table_rows.append([
+                docnbr,
+                inv_date.strftime("%Y-%m-%d") if inv_date else "—",
+                f"${round(amt):,}",
+                "—",
+                f"${round(bal):,}",
+                f"{age} days"
+            ])
+
+            # Pull matching Rcvbles row for Intro Line & attachment
+            match = rc[rc["ARInvoice Number"].astype(str).str.strip() == docnbr]
+            if not match.empty:
+                intro_line = str(match.iloc[0].get("Intro Line", "")).strip()
+                if intro_line:
+                    intro_lines.append(intro_line)
+                    print(f"  [DEBUG] Intro Line for {venue}/{docnbr}: {intro_line}")
+                att_link = str(match.iloc[0].get("Attachment", "")).strip()
+                if att_link:
+                    data, fname = download_pdf_from_drive(drive, att_link)
+                    if data:
+                        attachments.append((data, fname))
+                        print(f"  [DEBUG] Attached {fname} for {venue}/{docnbr}")
+            else:
+                print(f"  [DEBUG] No Rcvbles match for invoice {docnbr}")
+
+        if not table_rows or max_days < min_days:
+            print(f"⏭️  Skipping {venue} (max {max_days} days < {min_days})")
+            continue
+
+        print(f"\nVenue: {venue}\n  Max days late: {max_days}\n  Total due: ${round(total_due):,}")
+        send_it = input("Send this reminder? (Y/N): ").strip().lower()
+        if send_it != "y":
+            print(f"  ❎ Skipped {venue}.")
+            continue
+
+        subject_prefix = "[TEST] " if mode == "T" else ""
+        subject = f"{subject_prefix}Friendly update on your Mixed Nuts performance invoices"
+        summary_line = f"Total outstanding balance for {venue} = ${round(total_due):,}."
+        if intro_lines:
+            intro_lines.append("I’ve attached copies of the invoices for your convenience. (You may already have these on file.)")
+
+        plain, html = make_html_email(
+            [f"Hi there,", "", "Thanks again for having The Mixed Nuts perform!"],
+            table_rows,
+            summary_line,
+            intro_lines
+        )
+
+        recipient = TEST_EMAIL
         try:
-            send_gmail(gmail_service, subj, plain_text, html_text, recipient)
-            e["Sent?"] = f"Sent {dt.datetime.now().strftime('%Y-%m-%d %H:%M')} ({'TEST' if mode == 'T' else 'FINAL'})"
-            print("  ✅ OK")
-        except Exception as ex:
-            e["Sent?"] = f"FAILED: {ex}"
-            print(f"  ❌ FAILED: {ex}")
-        sent_rows.append(e)
+            send_gmail(gmail, subject, plain, html, recipient, attachments)
+            mode_label = "TEST" if mode == "T" else "FINAL"
+            print(f"  ✅ Sent ({mode_label})")
+        except Exception as e:
+            print(f"  ❌ Failed to send {venue}: {e}")
 
-    if mode == "F":
-        sent_final = sum(1 for e in sent_rows if e["Sent?"].startswith("Sent"))
-        skipped_final = len(all_emails) - sent_final
-        print(f"\nSummary: {sent_final} emails sent, {skipped_final} skipped.")
+    print(f"\nAll done in {'TEST' if mode == 'T' else 'FINAL'} mode!")
 
-    print(f"All done in {'TEST' if mode == 'T' else 'FINAL'} mode!")
-
-# ------------------ ENTRY ------------------
+# ---------------- ENTRY ----------------
 if __name__ == "__main__":
     import argparse
     parser = argparse.ArgumentParser()
@@ -367,15 +286,5 @@ if __name__ == "__main__":
     parser.add_argument("--creds", required=True)
     args = parser.parse_args()
 
-    mode = input("Send test emails or final emails? (T/F): ").strip().upper()
-    if mode not in ("T", "F"):
-        mode = mode.lower()
-        if mode == "t":
-            mode = "T"
-        elif mode == "f":
-            mode = "F"
-        else:
-            print("Invalid selection. Exiting.")
-            sys.exit(1)
-
+    mode = input("Send test emails or final emails? (T/F): ").strip().upper() or "T"
     build_and_send(args.spreadsheet, args.journal_tab, args.rcvbles_tab, args.creds, mode)

@@ -5,7 +5,7 @@ According to our records, the following invoice(s) remain open. Could you please
 
 Invoice # | Invoice Date | Amount | Payments | Balance | Age
 ---|---|---|---|---|---
-704CAS | 2025-10-10 | $240 | — | $240 | 18 days
+704CAS | 2025-10-10 | $240 | — | $240 | 22 days
 
 Total outstanding balance for Cedarwood At Sandy = $240.
 

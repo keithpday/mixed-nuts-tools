@@ -5,7 +5,7 @@ According to our records, the following invoice(s) remain open. Could you please
 
 Invoice # | Invoice Date | Amount | Payments | Balance | Age
 ---|---|---|---|---|---
-708MKSC | 2025-10-14 | $80 | — | $80 | 14 days
+708MKSC | 2025-10-14 | $80 | — | $80 | 18 days
 
 Total outstanding balance for Magna Senior Ctr = $80.
 
