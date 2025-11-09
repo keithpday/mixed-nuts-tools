@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 import os
+import sys
 import json
 import sqlite3
 import subprocess
@@ -526,7 +527,8 @@ def main():
         print("\n" + MENU)
         choice = input("Choose: ").strip()
         if choice == "0":
-            print("Bye."); return
+            print("Bye.")
+            sys.exit(0)  # exit cleanly so launcher closes right away
 
         if choice in {"1","2","3","4","5","6"}:
             if choice == "1": svc_status(); pause()

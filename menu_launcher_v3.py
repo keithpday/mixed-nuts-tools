@@ -8,7 +8,8 @@ Enhancements:
   • Instruction line below title
   • Right-click (Button-3) shows description popup before running
   • Fully compatible with script_menu.db/menu_items
-  • ✅ Args column now passed to launched programs
+  • ✅ Args and Keep_Open columns now both supported
+  • 🪄 MENU_LAUNCHER_MODE env var prevents double "Press ENTER" pauses
 """
 
 import tkinter as tk
@@ -51,7 +52,6 @@ class ScriptMenuApp(tk.Tk):
     def __init__(self):
         super().__init__()
 
-        # Title includes actual program name
         self.title(f"🎵 Mixed Nuts Script Menu ({os.path.basename(__file__)})")
 
         try:
@@ -59,7 +59,6 @@ class ScriptMenuApp(tk.Tk):
         except tk.TclError:
             self.geometry("2000x2000")
 
-        # Instruction line below title
         instr = ttk.Label(
             self,
             text="Click an item to run it.  Right-click an item to see its description.",
@@ -68,12 +67,10 @@ class ScriptMenuApp(tk.Tk):
         )
         instr.pack(pady=(6, 0))
 
-        # Initialize
         self.conn = db_connect()
         self.menu_items = []
         self.option_numbers = []
 
-        # Build UI
         self._build_ui()
         self.load_menu_items()
         append_status("Menu launcher started.")
@@ -85,19 +82,16 @@ class ScriptMenuApp(tk.Tk):
         frame = ttk.Frame(self)
         frame.pack(fill="both", expand=True, padx=12, pady=8)
 
-        # Scrollable listbox
         self.listbox = tk.Listbox(frame, font=("TkDefaultFont", 11))
         sb = ttk.Scrollbar(frame, orient="vertical", command=self.listbox.yview)
         self.listbox.configure(yscrollcommand=sb.set)
         self.listbox.pack(side="left", fill="both", expand=True)
         sb.pack(side="right", fill="y")
 
-        # Bind actions
-        self.listbox.bind("<ButtonRelease-1>", self.run_selected)      # single-click to run
+        self.listbox.bind("<ButtonRelease-1>", self.run_selected)
         self.listbox.bind("<Return>", self.run_selected)
-        self.listbox.bind("<Button-3>", self.show_description_popup)   # right-click for description
+        self.listbox.bind("<Button-3>", self.show_description_popup)
 
-        # Bottom buttons
         btn_frame = ttk.Frame(self)
         btn_frame.pack(fill="x", pady=8)
         ttk.Button(btn_frame, text="Refresh Menu", command=self.load_menu_items).pack(
@@ -110,7 +104,6 @@ class ScriptMenuApp(tk.Tk):
             side="right", padx=4
         )
 
-        # Status/log label
         self.status_var = tk.StringVar(value="App started. Loaded menu items.")
         status = ttk.Label(
             self,
@@ -131,19 +124,19 @@ class ScriptMenuApp(tk.Tk):
 
         try:
             cur = self.conn.cursor()
-            # ✅ include args column
             cur.execute(
-                "SELECT option_number, label, command, program_path, args FROM menu_items ORDER BY option_number"
+                "SELECT option_number, label, command, program_path, args, keep_open "
+                "FROM menu_items ORDER BY option_number"
             )
             rows = cur.fetchall()
-            for opt, label, cmd, path, args in rows:
+            for opt, label, cmd, path, args, keep_open in rows:
                 display = f"{opt}. {label}"
                 if cmd:
                     display += f" ({cmd})"
                 elif path:
                     display += f" ({os.path.basename(path)})"
                 self.listbox.insert("end", display)
-                self.menu_items.append((opt, label, cmd, path, args))
+                self.menu_items.append((opt, label, cmd, path, args, keep_open or "*Auto"))
                 self.option_numbers.append(opt)
             self.status_var.set(f"Loaded {len(rows)} menu items.")
         except Exception as e:
@@ -157,11 +150,10 @@ class ScriptMenuApp(tk.Tk):
         if not selection:
             return
         index = selection[0]
-        opt_num, label, cmd, path, args = self.menu_items[index]
+        opt_num, label, cmd, path, args, keep_open = self.menu_items[index]
         append_status(f"Running option {opt_num}: {label}")
         self.status_var.set(f"Running: {label}")
 
-        # Determine executable
         run_path = None
         if cmd and os.path.exists(cmd.strip()):
             run_path = cmd.strip()
@@ -174,40 +166,47 @@ class ScriptMenuApp(tk.Tk):
             )
             return
 
-
-        # Combine args (flatten multiline input)
         arg_str = " ".join((args or "").splitlines())
 
         try:
-            # 🪄 Launch the selected script in its own terminal and keep the menu open
             append_status(f"Launching in foreground for option {opt_num}: {label}")
 
+            # Build base command
             if run_path.endswith(".py"):
-                subprocess.Popen(
-                    [
-                        "gnome-terminal",
-                        "--",
-                        "bash",
-                        "-c",
-                        f'python3 "{run_path}" {arg_str}; '
-                        'echo; echo "---- Press ENTER to close this window ----"; read'
-                    ],
-                    start_new_session=True
-                )
+                base_cmd = f'python3 "{run_path}" {arg_str}'
             else:
-                subprocess.Popen(
-                    [
-                        "gnome-terminal",
-                        "--",
-                        "bash",
-                        "-c",
-                        f'bash "{run_path}" {arg_str}; '
-                        'echo; echo "---- Press ENTER to close this window ----"; read'
-                    ],
-                    start_new_session=True
+                base_cmd = f'bash "{run_path}" {arg_str}'
+
+            # Determine how terminal should behave
+            if keep_open == "*Yes":
+                shell_cmd = (
+                    f"{base_cmd}; "
+                    f'if [ -n "$MENU_LAUNCHER_MODE" ]; then '
+                    f'echo; echo "---- Press ENTER to close this window ----"; read; '
+                    f'fi'
                 )
 
+
+            elif keep_open == "*No":
+                shell_cmd = f"{base_cmd}"
+            else:  # *Auto — keep open only if an error occurs
+                shell_cmd = (
+                    f"{base_cmd} || "
+                    f"(echo; echo '⚠️  An error occurred. Press ENTER to close...'; read; exit)"
+                )
+
+            # 🪄 Set environment variable to prevent double ENTER pauses
+            env = os.environ.copy()
+            env["MENU_LAUNCHER_MODE"] = "1"
+
+            subprocess.Popen(
+                ["gnome-terminal", "--", "bash", "-c", shell_cmd],
+                start_new_session=True,
+                env=env,
+            )
+
             self.status_var.set(f"Launched: {label}")
+
         except Exception as e:
             messagebox.showerror("Run Error", str(e))
 
@@ -215,7 +214,6 @@ class ScriptMenuApp(tk.Tk):
     # Right-click popup with description
     # ────────────────────────────────
     def show_description_popup(self, event):
-        """Show popup with description when right-clicking an item."""
         try:
             index = self.listbox.nearest(event.y)
             if index < 0 or index >= len(self.option_numbers):
@@ -231,19 +229,15 @@ class ScriptMenuApp(tk.Tk):
             desc = rec.get("description") or "(No description available.)"
             label = rec.get("label", f"Option {opt_num}")
 
-            # Popup window
             popup = tk.Toplevel(self)
             popup.title(f"{label}")
             popup.transient(self)
-            popup.geometry(
-                f"+{self.winfo_pointerx()+10}+{self.winfo_pointery()+10}"
-            )
+            popup.geometry(f"+{self.winfo_pointerx()+10}+{self.winfo_pointery()+10}")
             popup.configure(bg="white")
 
             frm = ttk.Frame(popup, padding=10)
             frm.pack(fill="both", expand=True)
 
-            # Removed redundant title label
             txt = tk.Text(frm, wrap="word", height=27, width=140)
             txt.insert("1.0", desc)
             txt.configure(state="disabled")
@@ -267,7 +261,7 @@ class ScriptMenuApp(tk.Tk):
         return dict(zip(cols, row))
 
     # ────────────────────────────────
-    # Cancel Last (placeholder for your logic)
+    # Cancel Last
     # ────────────────────────────────
     def cancel_last(self):
         append_status("Cancel last pressed.")
