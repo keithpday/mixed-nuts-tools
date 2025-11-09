@@ -1,29 +1,68 @@
-# Python cache
+# ────────────────────────────────
+# Python cache and compiled files
+# ────────────────────────────────
 __pycache__/
 *.pyc
+*.pyo
+*.pyd
 
+# ────────────────────────────────
 # Virtual environments
+# ────────────────────────────────
 venv/
 .venv/
 
-# Credentials
+# ────────────────────────────────
+# Credentials / tokens / secrets
+# ────────────────────────────────
 *.json
 *.pickle
 .env
+token.json
+credentials.*
+*.pem
+*.p12
+
+# Specific config subfolders
 config/*.json
 config/*.pickle
+Scripts/config/
+Cron_Console/config/
 
-
-# Databases
+# ────────────────────────────────
+# Databases and data caches
+# ────────────────────────────────
 *.db
 *.sqlite
 
-# Large/binary data
+# ────────────────────────────────
+# Large or binary data
+# ────────────────────────────────
 Data/
 *.xlsx
 *.ods
+*.csv
 *.mp3
 *.wav
+*.pdf
+*.zip
+*.tar.gz
 
+# ────────────────────────────────
+# Logs and temp files
+# ────────────────────────────────
+*.log
+*.bak
+*.tmp
+*.swp
+*.swo
+menu_status.txt
 
-token.json
+# ────────────────────────────────
+# IDE and system files
+# ────────────────────────────────
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/
+
