@@ -17,7 +17,8 @@ from dotenv import load_dotenv
 from dotenv import load_dotenv
 
 # Load environment variables from .env file
-load_dotenv()
+BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+load_dotenv(os.path.join(BASE_DIR, ".env"))
 
 # Twilio credentials (from environment)
 TWILIO_SID  = os.getenv("TWILIO_SID", "")
@@ -202,7 +203,7 @@ def main():
     # Restrict to only needed headers to avoid #REF! or duplicate-column errors
     EXPECTED_HEADERS = [
         "Day", "Date", "Venue", "Time", "Location", "Set", "Pays",
-        "Vocal", "Piano", "Bring Key board", "Bass", "Drums", "Guitar", "Vibes",
+        "Vocal", "Piano", "Bring Keyboard", "Bass", "Drums", "Guitar", "Vibes",
         "Revision Date", "Notes"
     ]
 
