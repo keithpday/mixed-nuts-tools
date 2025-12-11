@@ -112,12 +112,13 @@ def parse_sheet_date(raw: str):
     # you could extend this to handle that; for now, return None on failure.
     return None
 
-
 def safe_float(x):
     try:
-        return float(str(x).replace(",", "").strip())
+        cleaned = re.sub(r"[^0-9.\-]", "", str(x))
+        return float(cleaned) if cleaned else 0.0
     except Exception:
         return 0.0
+
 
 
 def today_str():
@@ -516,6 +517,10 @@ def main():
 
     # Read BkdDts only (balances already computed by formulas there)
     bkddts = read_sheet_as_dicts(sheets, a.sheet_id, "BkdDts", debug)
+    if debug and bkddts:
+        print("\n[DEBUG] Column headers detected:")
+        for h in bkddts[0].keys():
+            print(f"→ '{h}'  (len={len(h)}) bytes={list(h.encode())}")
 
     data = build_invoice_data_from_bkddts(bkddts, min_days, debug)
     try:

@@ -182,14 +182,31 @@ CITY_TO_COUNTY = {
 # ──────────────────────────────────────────────────────────────────────────────
 
 def is_blocked_date(d: date, block_wednesdays: bool) -> bool:
-    """True if date is Sunday, holiday, or (optionally) Wednesday."""
+    """Determine whether a date should be excluded from availability."""
+
+    # Always block Sundays
     if d.weekday() == 6:  # Sunday
         return True
+
+    # Always block New Year's Day, Christmas Eve, Christmas Day
+    if (d.month, d.day) in {(1, 1), (12, 24), (12, 25)}:
+        return True
+
+    # Block Thanksgiving: 4th Thursday of November
+    if d.month == 11 and d.weekday() == 3:  # Thursday == 3
+        # 4th Thursday always falls between Nov 22–28
+        if 22 <= d.day <= 28:
+            return True
+
+    # Block Wednesdays unless it's Veterans Day (Nov 11)
     if block_wednesdays and d.weekday() == 2:  # Wednesday
-        return True
-    if (d.month, d.day) in HOLIDAYS_MMDD:
-        return True
+        # Exception: Veterans Day (Nov 11)
+        if not (d.month == 11 and d.day == 11):
+            return True
+
     return False
+
+
 
 
 def daterange(start: date, end: date):
@@ -483,7 +500,7 @@ def build_month_calendar(year: int,
     html = []
     month_name = calendar.month_name[month]
 
-    html.append(f"<h2>{month_name} {year}</h2>")
+    html.append(f"<h2>Dates & Times We Can Perform — {month_name} {year}</h2>")
     html.append(f"<table style='{table_style}'>")
 
     # Header Mon–Sat
@@ -688,10 +705,9 @@ def main():
     body = f"""
 <p>Hi {escape(requester)},</p>
 
-<p>Thanks for reaching out. We love bringing our upbeat 1950s–60s music to your community.</p>
+<p>Thanks for reaching out. We love bringing our upbeat Big Band music to your community.</p>
 
-<p>Here is our availability. Each time window fits a full 1-hour show and already includes travel and setup time, so any time within a listed range works.</p>
-
+<p>Here is our availability. Pick a day and a start time for a full {gig_hours}-hour show within the times shown for that date.</p>
 
 {calendar_html}
 
@@ -709,6 +725,7 @@ so wonderful to play for.</p>
 🎶 <a href="https://facebook.com/TheMixedNutsSwingBand">facebook.com/TheMixedNutsSwingBand</a>
 </p>
 """
+
 
     print("\nSending email to yourself for review...")
     send_email(subject, body, SEND_TO)
