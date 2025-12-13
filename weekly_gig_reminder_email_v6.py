@@ -323,8 +323,10 @@ def html_table(rows, style_lookup):
     TABLE_MIN_PX = 900
     TD_BASE = "padding:3px; vertical-align:middle; text-align:center; font-family:Arial,sans-serif; font-size:14px;"
     head = ("Date","Venue","Time","Location","Set","Pays","Vocal","Piano","Bass","Drums","Guitar","Vibes")
-    s = [f"<div style='width:100%; overflow-x:auto;'>"]
-    s.append(f"<table border='1' cellpadding='3' cellspacing='0' style='border-collapse:collapse; min-width:{TABLE_MIN_PX}px;'>")
+    #s = [f"<div style='width:100%; overflow-x:auto;'>"]
+    s = []
+    #s.append(f"<table border='1' cellpadding='3' cellspacing='0' style='border-collapse:collapse; min-width:{TABLE_MIN_PX}px;'>")
+    s.append("<table border='1' cellpadding='3' cellspacing='0' style='border-collapse:collapse; width:100%;'>")
     s.append(f"<tr style='font-weight:bold; background:{header_bg}'>" + "".join(f"<td style='{TD_BASE}'>{h}</td>" for h in head) + "</tr>")
     for r in rows:
         def role_td(v): return f"<td style='{TD_BASE}{style_lookup(v)}'>{esc(v)}</td>"
@@ -339,7 +341,8 @@ def html_table(rows, style_lookup):
                      role_td(r.get('vocal','')), role_td(r.get('piano','')), role_td(r.get('bass','')),
                      role_td(r.get('drums','')), role_td(r.get('guitar','')), role_td(r.get('vibes',''))
                  ]) + "</tr>")
-    s.append("</table></div>")
+    #s.append("</table></div>")
+    s.append("</table>")
     return "\n".join(s)
 
 def get_credentials():
